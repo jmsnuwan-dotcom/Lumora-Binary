@@ -1,0 +1,18 @@
+LUMORA V10 SIGNAL STABLE - HISTORY + NEWS COUNTDOWN FIX
+
+FIXES
+1. Signal History keeps completed WIN/LOSS records in data.json.
+2. The server reconciles ALL expired signals that do not yet have a result whenever /api/v1/state or MT5 market data arrives.
+3. A late EA result is deduplicated and attached to the original signal.
+4. Live signal card clears old signal values after expiry/close.
+5. News Countdown is now a live server-time countdown and does not stay frozen at 15m 42s.
+6. News countdown is based on the next scheduled 30-minute window until a real calendar feed is connected.
+7. Service-worker cache version was bumped so the updated page is loaded.
+
+IMPORTANT
+The current News Countdown is a deterministic dashboard timer, not a live economic-calendar feed. It should not be treated as a verified economic-news event time until a real news-calendar API/feed is connected.
+
+START
+Run STOP_SERVER.bat first if an older server is running.
+Then run run_server.bat.
+Open http://localhost:8787 and press Ctrl+F5.

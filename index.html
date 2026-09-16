@@ -1,0 +1,616 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#020817"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>LUMORA — 30 Second Signals</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#020817;color:#eef7ff;font-family:Arial,Segoe UI,sans-serif;min-width:1180px;font-size:14px}.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 42% 5%,#063a72 0,transparent 27%),radial-gradient(circle at 90% 80%,#26005d 0,transparent 27%),linear-gradient(120deg,#020817,#020512 60%,#080018)}
+header{height:108px;border-bottom:1px solid #143c75;display:flex;align-items:center;padding:10px 25px;gap:22px;background:#02091af2}.logo{display:flex;align-items:center;gap:8px}.mark{width:72px;height:72px;border:3px solid #12caff;border-radius:17px;display:grid;place-items:center;font-size:35px;box-shadow:0 0 22px #075fff,0 0 25px #b11cff}.word{font-size:49px;font-weight:900;letter-spacing:-4px;background:linear-gradient(90deg,#fff,#e9f4ff,#09bfff,#b93cff);-webkit-background-clip:text;color:transparent}.sub{font-size:8px;letter-spacing:.2em;color:#a4bbd9;margin-left:-270px;margin-top:78px}.quote{font-style:italic;color:#cbdcff;font-size:16px;line-height:1.4;margin-left:25px}.tools{margin-left:auto;display:flex;gap:9px;align-items:center}.sessions{display:flex;border:1px solid #174582;border-radius:8px;overflow:hidden}.sessions div{width:72px;text-align:center;padding:7px;border-right:1px solid #173b70}.sessions div:last-child{border:0}.sessions b,.sessions strong,.sessions em{display:block}.sessions b{font-size:10px;color:#9eb5d3}.sessions strong{font-size:14px}.sessions em{font-size:10px;color:#00f19a;font-style:normal}.sessions .on{box-shadow:inset 0 -2px #12dfff}.news{border:1px solid #174582;border-radius:8px;padding:7px 12px;min-width:155px}.news b,.news strong,.news small{display:block}.news b{font-size:10px}.news strong{font-size:18px;color:#ff6170}.news small{font-size:8px;color:#9db0ca}.install{display:none;border:1px solid #00caff;border-radius:10px;background:linear-gradient(135deg,#043e67,#5a13a8);color:#fff;padding:10px 15px;box-shadow:0 0 22px #075cff55;cursor:pointer}.install.show{display:block}.bell{background:none;border:0;color:#ff4f5d;font-size:23px;position:relative}.bell i{position:absolute;background:#ff3c4e;color:#fff;border-radius:50%;font-size:10px;padding:4px 7px;top:-6px;right:-5px}.profile{display:flex;gap:8px;align-items:center}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#506887}.profile b,.profile small{display:block}.profile b{font-size:11px}.profile small{font-size:9px;color:#00ef9a}
+.layout{display:flex}.side{width:202px;flex:0 0 202px;border-right:1px solid #143565;background:#010817c9;padding:12px 9px;min-height:780px;display:flex;flex-direction:column}.side a{height:52px;padding:0 15px;display:flex;align-items:center;gap:16px;color:#b6c8df;border-radius:9px}.side a span{font-size:22px;width:25px;text-align:center}.side a.active{background:linear-gradient(90deg,#0759bd,#062b61);border:1px solid #138eff;box-shadow:inset 4px 0 #10c8ff}.promo{margin-top:auto;height:342px;border:1px solid #067eff;border-radius:10px;text-align:center;padding:32px 8px;background:radial-gradient(circle at 50% 75%,#a96b001f,transparent 35%),#030a18;box-shadow:0 0 20px #006dff22}.promo .big{font-size:20px;line-height:1.28}.promo b,.promo strong{color:#ffd63b}.promo strong{font-size:23px}.bars{color:#ffcb32;font-size:42px;line-height:.55;margin:25px}.promo small{font-size:8px;letter-spacing:.12em}
+main{flex:1;padding:13px 15px}.ticker{display:grid;grid-template-columns:1.6fr .6fr .65fr 1fr 1.05fr .9fr;gap:10px}.ticker>div{height:79px;border:1px solid #163b78;border-radius:9px;background:#03132ff2;padding:12px 15px}.ticker small{color:#9eb5d2;font-size:10px}.ticker b{display:block;font-size:20px;margin-top:5px}.gold{display:flex;align-items:center;gap:10px;border-color:#a99220!important}.gold strong{margin-left:auto;font-size:29px}.gold em{position:absolute;margin:45px 0 0 195px;color:#00ef9a;font-style:normal;font-size:12px}.green{color:#00ef9a!important}.session b,.bridge b{font-size:19px}.session i,.bridge i{display:inline-block;width:15px;height:15px;border-radius:50%;background:#00ef9a;box-shadow:0 0 13px #00ef9a;margin-right:7px}.session em,.bridge em{display:block;color:#00ef9a;font-size:10px;margin-left:23px;font-style:normal}.bridge b{color:#00ef9a}.bridge em{color:#9db1cc}
+.grid{display:grid;grid-template-columns:1.08fr 1.15fr .72fr .63fr;gap:10px;margin-top:12px}.card{border:1px solid #16488d;border-radius:11px;background:linear-gradient(145deg,#03172ff0,#020a1ff2);box-shadow:0 8px 35px #0006;overflow:hidden}.pad{padding:13px}.title{display:flex;justify-content:space-between;color:#12dcff;font-size:14px}.ai{font-size:9px;border:1px solid #6c31ff;color:#7ceaff;background:#281080;padding:4px 8px;border-radius:5px}.signal h2{text-align:center;font-size:20px;margin:13px}.signalbox{height:74px;margin:0 14px;border-radius:9px;border:1px solid #00ef9a;background:linear-gradient(#078049,#08ca77);display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;box-shadow:0 0 25px #00ff9a44}.signalbox.sell{background:linear-gradient(#7d1229,#df2148);border-color:#ff4e6b}.stats{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:7px;margin:12px}.stats>div{height:70px;border:1px solid #173e75;border-radius:7px;background:#061a38;padding:9px}.stats small,.entry small{color:#9eb5d2;font-size:10px}.stats strong{display:block;font-size:23px;margin-top:5px}.stats div:nth-child(2) strong{color:#12e8ff}.timer{display:flex;justify-content:space-between;align-items:center}.ring{width:58px;height:58px;border:4px solid #16e4d2;border-right-color:#eef5ff;border-radius:50%;display:grid;place-items:center;box-shadow:0 0 14px #00e7d055}.ring b{font-size:12px}.entry{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #153866}.entry>div{padding:10px 8px;border-right:1px solid #153866}.entry b{display:block;font-size:15px;margin-top:5px}.entry em{font-size:8px;color:#8fa6c4;font-style:normal}.chart{height:390px;padding:13px}.chartbox{height:335px;margin-top:8px}.chartbox canvas{width:100%;height:100%}.tabs span,.tabs b{padding:5px 8px;font-size:9px;margin-left:3px}.tabs b{background:#007ed8;color:white;border-radius:4px}.analysis{padding:13px}.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #102e58;font-size:11px}.row span{color:#a9bdd7}.row em{font-style:normal;color:#aebdd0;font-weight:normal;margin-left:6px}.pressure{font-size:10px}.pressure span{display:flex;justify-content:space-between;margin:9px 0;color:#9eb4d0}.bar{height:8px;background:#113b59;border-radius:6px;overflow:hidden}.bar u{display:block;height:100%;background:#00e7ad;text-decoration:none}.bar.red u{background:#ff4e68}.noti{padding:13px}.noti article{display:grid;grid-template-columns:38px 24px 1fr;gap:6px;padding:11px 0;border-bottom:1px solid #15355f}.noti article:last-child{border:0}.noti time,.noti small{font-size:8px;color:#9db1cc}.noti b,.noti strong,.noti small{display:block}.noti b,.noti strong{font-size:9px}.yellow{color:#ffd23c}.red{color:#ff4e68}.win{color:#00ef9a}
+.perfrow{display:grid;grid-template-columns:2.5fr .95fr;gap:10px;margin-top:12px}.perf,.risk{padding:12px}.perfgrid,.riskgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:9px}.perfgrid div,.riskgrid div{background:#061a38;border:1px solid #153a70;border-radius:6px;padding:8px}.perfgrid small,.riskgrid small{font-size:9px;color:#a4b9d4}.perfgrid b,.riskgrid b{display:block;font-size:17px;margin-top:5px}.riskgrid{grid-template-columns:repeat(3,1fr)}
+.bottom{display:grid;grid-template-columns:1.9fr .95fr .78fr;gap:10px;margin-top:12px}.recent,.flow,.mobile{padding:13px;min-height:198px}.table{width:100%;border-collapse:collapse;margin-top:7px}.table th,.table td{border-bottom:1px solid #12315c;padding:9px 5px;text-align:left;font-size:9px}.table th{color:#a0b5d0;font-weight:normal}.badge{padding:4px 9px;border-radius:12px}.badge.buy{color:#00ef9a;background:#063f38}.badge.sell{color:#ff4e68;background:#48152a}.flowrow{display:grid;grid-template-columns:1fr .5fr 1fr;padding:9px;border-bottom:1px solid #12315c;font-size:10px}.flowrow b{color:#00ef9a}.flowrow small{text-align:right;color:#9db1cc}.flowrow.current{border:1px solid #00bfff;border-radius:7px;background:#007cff12}.mobile{display:flex;background:radial-gradient(circle at 80% 70%,#4e00ff44,transparent 38%),#03172e}.mobile b{color:#12e0ff;font-size:15px}.mobile p{font-size:9px;line-height:1.8;color:#bfd0e5}.mobile button{border:1px solid #00caff;border-radius:8px;background:linear-gradient(90deg,#008ed8,#5130e8);color:#fff;padding:9px;font-size:9px;font-weight:bold}.phone{margin-left:auto;align-self:flex-end;width:78px;height:142px;border:3px solid #abb9d1;border-radius:17px;text-align:center;padding-top:42px;color:#12e0ff;box-shadow:0 0 16px #00caff}.phone b{font-size:8px;color:#fff}
+footer{height:47px;border-top:1px solid #12325e;padding:0 25px;display:flex;align-items:center;gap:25px;color:#7188a9;font-size:9px;background:#02091b}.toast{position:fixed;right:25px;top:125px;background:#06182d;border:1px solid #00d8ff;padding:14px 18px;border-radius:9px;box-shadow:0 0 30px #00bfff55;display:none;z-index:9}.toast.show{display:block}
+
+.header-logo{width:290px;height:82px;object-fit:cover;object-position:center;display:block;filter:drop-shadow(0 0 12px rgba(0,145,255,.28));border-radius:8px}.notify-btn{height:58px;border:1px solid #19ef82;border-radius:10px;background:linear-gradient(135deg,#052e28,#063d34);color:#bfffe7;padding:8px 14px;cursor:pointer;box-shadow:0 0 16px rgba(0,239,154,.18)}.notify-btn b{display:block;font-size:11px;color:#00f19a}.app-ready{height:58px;min-width:120px;border:1px solid #16a86c;border-radius:10px;background:#031c19;display:flex;align-items:center;gap:6px;padding:7px 11px;color:#00ef9a}.app-ready b,.app-ready small{display:block}.app-ready small{font-size:8px;color:#b1c9c3}.app-ready{font-size:22px}
+@media(max-width:900px){body{min-width:0;font-size:13px}.topbar{height:auto;min-height:92px;padding:8px 10px;flex-wrap:wrap;gap:8px}.logo{width:210px}.header-logo{width:210px;height:64px}.sub{position:absolute;left:12px;top:69px;margin:0;font-size:6px}.quote{display:none}.tools{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.sessions div{width:58px}.news{min-width:135px}.install{min-width:105px}.notify-btn{min-width:145px}.app-ready{min-width:110px}.layout{display:block}.side{width:100%;min-height:0;border-right:0;border-bottom:1px solid #143565;padding:6px;position:sticky;top:0;z-index:4}.side nav{display:flex;overflow-x:auto;gap:4px}.side a{height:40px;min-width:max-content;padding:0 10px;font-size:11px;gap:6px}.side a span{font-size:16px;width:auto}.promo{display:none}main{padding:8px}.ticker{grid-template-columns:repeat(2,1fr)}.ticker>div{height:65px;padding:9px}.gold{grid-column:1/-1}.gold strong{font-size:23px}.gold em{margin:38px 0 0 115px;font-size:9px}.grid{grid-template-columns:1fr;gap:8px}.notifications{grid-column:auto}.signalbox{font-size:39px}.chart{height:360px}.perfrow,.bottom{grid-template-columns:1fr}.perfgrid{grid-template-columns:repeat(4,1fr)}.riskgrid{grid-template-columns:repeat(3,1fr)}.mobile{min-height:180px}footer{height:auto;min-height:55px;flex-wrap:wrap;padding:9px 12px;gap:8px}footer i{margin:0!important}.table{min-width:680px}}
+@media(max-width:560px){.top-tools{display:none}.topbar{justify-content:center}.logo{width:230px}.header-logo{width:230px}.ticker{grid-template-columns:1fr 1fr}.ticker .gold{grid-column:1/-1}.signal-card h2{font-size:17px}.stats{grid-template-columns:1fr 1fr}.stats .timer{grid-column:1/-1}.entry{grid-template-columns:1fr 1fr}.analysis-row{font-size:10px}.perfgrid{grid-template-columns:1fr 1fr}.riskgrid{grid-template-columns:1fr 1fr 1fr}.bottom{gap:8px}.mobile{display:none}}
+
+/* LUMORA V5 FIX PACK */
+.header-logo{object-fit:contain!important;object-position:center!important}
+.entry-status{margin:8px 14px 0;text-align:center;font-size:11px;font-weight:800;letter-spacing:.08em;color:#a9c4df;border:1px solid #173e75;background:#061a38;border-radius:7px;padding:8px}
+.entry-status.now{color:#00ef9a;border-color:#00c987;background:#063b31;box-shadow:0 0 16px #00ef9a22}
+.entry-status.late{color:#ffd23c;border-color:#b88912;background:#3a2c0718}
+.entry-status.expired{color:#ff6170;border-color:#a32643;background:#3b0b1718}
+.signalbox.wait{background:linear-gradient(#12304f,#174b70);border-color:#12dcff;box-shadow:0 0 20px #12dcff22}
+.entry-status{height:34px;margin:8px 14px 0;border:1px solid #14528a;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:.5px;background:#061a38;color:#9db7d5;text-align:center}.entry-status.now{border-color:#00ef9a;background:#053c2d;color:#00ef9a;box-shadow:0 0 14px #00ef9a22}.entry-status.late{border-color:#ffd23c;background:#3b2e05;color:#ffd23c}.entry-status.expired{border-color:#ff4e68;background:#300916;color:#ff6c82}.signalbox.buy,.signalbox.sell{animation:signalPulse 1.8s ease-in-out infinite}@keyframes signalPulse{0%,100%{box-shadow:0 0 18px #00ef9a22}50%{box-shadow:0 0 30px #00ef9a55}}.signalbox.sell{animation-name:signalPulseRed}@keyframes signalPulseRed{0%,100%{box-shadow:0 0 18px #ff4e6822}50%{box-shadow:0 0 30px #ff4e6855}}
+
+.signalbox.buy{background:linear-gradient(#078049,#08ca77)}
+.signalbox.sell{background:linear-gradient(#7d1229,#df2148)}
+.chartbox{position:relative}
+#cv{display:block}
+@media(max-width:1180px){
+ body{min-width:0}
+ header{padding:9px 12px;gap:12px}
+ .quote{font-size:12px}
+ .tools{gap:6px}
+ .sessions div{width:60px}
+ .news{min-width:130px}
+ .install,.notify-btn,.app-ready{min-width:auto}
+ .side{width:170px;flex-basis:170px}
+}
+@media(max-width:900px){
+ header{height:auto;min-height:94px;flex-wrap:wrap}
+ .logo{width:220px}
+ .header-logo{width:220px;height:62px}
+ .sub{display:none}
+ .quote{display:none}
+ .tools{width:100%;margin-left:0;overflow-x:auto;justify-content:flex-start}
+ .sessions div{width:58px;flex:0 0 58px}
+ .news{min-width:135px;flex:0 0 135px}
+ .install,.notify-btn,.app-ready{height:50px;padding:7px 10px;flex:0 0 auto}
+ .layout{display:block}
+ .side{position:sticky;top:0;width:100%;min-height:0;z-index:20;border-right:0;border-bottom:1px solid #143565;padding:5px 7px}
+ .side nav{display:flex;overflow-x:auto;gap:4px}
+ .side a{height:42px;min-width:max-content;padding:0 10px;gap:6px;font-size:11px}
+ .side a span{font-size:16px;width:auto}
+ .promo{display:none}
+ main{padding:8px}
+ .ticker{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ticker .gold{grid-column:1/-1}
+ .gold strong{font-size:23px}
+ .gold em{margin:38px 0 0 115px}
+ .grid{grid-template-columns:1fr}
+ .signal,.chart,.analysis,.noti{min-width:0}
+ .chart{height:380px}
+ .chartbox{height:325px}
+ .perfrow,.bottom{grid-template-columns:1fr}
+ .recent{overflow-x:auto}
+ .table{min-width:680px}
+ footer{height:auto;min-height:55px;flex-wrap:wrap;padding:9px 12px}
+}
+@media(max-width:560px){
+ header{padding:6px 8px}
+ .logo,.header-logo{width:190px;height:55px}
+ .tools{gap:5px}
+ .sessions div{width:50px;flex-basis:50px;padding:5px 3px}
+ .sessions strong{font-size:11px}
+ .news{min-width:120px;flex-basis:120px;padding:6px}
+ .news strong{font-size:14px}
+ .install{font-size:10px}
+ .notify-btn{font-size:10px}
+ .app-ready{font-size:17px}
+ .ticker{grid-template-columns:1fr 1fr}
+ .ticker>div{height:62px;padding:8px}
+ .gold strong{font-size:21px}
+ .gold em{font-size:8px;margin:37px 0 0 98px}
+ .signal h2{font-size:17px}
+ .signalbox{height:66px;font-size:38px}
+ .entry{grid-template-columns:1fr 1fr}
+ .stats{grid-template-columns:1fr 1fr}
+ .stats .timer{grid-column:1/-1}
+ .chart{height:360px}
+ .chartbox{height:305px}
+ .perfgrid{grid-template-columns:1fr 1fr}
+ .riskgrid{grid-template-columns:1fr 1fr 1fr}
+ .mobile{display:flex}
+ .phone{width:62px;height:120px}
+}
+</style><style>
+.mobile-nav{display:none}.page-view{display:none;position:fixed;inset:0;background:#020817f5;z-index:20;padding:30px}.page-card{max-width:900px;margin:70px auto;background:#04142d;border:1px solid #08bfff;border-radius:14px;padding:20px;box-shadow:0 0 40px #006dff55}.page-card #pageContent{margin-top:20px;line-height:1.8;color:#c9d9ee}.page-card button{background:none;border:1px solid #24578d;color:#fff;border-radius:7px;padding:5px 10px}.nav{cursor:pointer}
+@media(max-width:900px){body{min-width:0}.topbar{height:70px;padding:7px 12px}.brand .mark{width:48px;height:48px;border-radius:12px}.brand .word{font-size:27px;letter-spacing:-2px}.sub,.quote,.top-tools .sessions,.news,.profile{display:none}.top-tools{margin-left:auto}.install{padding:7px;font-size:10px}.layout{display:block}.side{display:none}.mobile-nav{display:flex;position:sticky;top:0;z-index:10;height:52px;background:#020b1cf2;border-bottom:1px solid #16488d;align-items:center;justify-content:space-between;padding:0 14px;color:#14ddff}.mobile-nav button{border:1px solid #16488d;background:#061a38;color:#fff;border-radius:7px;padding:7px 10px}.mobile-nav b{font-size:16px}main{padding:10px}.ticker{grid-template-columns:1fr 1fr;gap:7px}.ticker>div{height:65px;padding:9px}.gold{grid-column:1/-1}.gold strong{font-size:23px}.gold em{margin:39px 0 0 128px;font-size:9px}.grid{grid-template-columns:1fr;gap:9px}.chart{order:2}.analysis{order:3}.noti{order:4}.signal{order:1}.chartbox{height:305px}.perfrow{grid-template-columns:1fr;gap:9px}.perfgrid{grid-template-columns:repeat(4,1fr)}.bottom{grid-template-columns:1fr;gap:9px}.mobile{display:flex}.recent{overflow:auto}.entry{grid-template-columns:repeat(2,1fr)}.entry>div:nth-child(2){border-right:0}.notifications article{grid-template-columns:35px 20px 1fr}footer{height:auto;min-height:50px;padding:10px;flex-wrap:wrap}footer i{display:none}.trade-promo{display:none}.signalbox{font-size:40px}.ticker .session,.ticker .bridge{grid-column:span 1}.page-view{padding:12px}.page-card{margin:55px auto 0}.top-grid{display:contents}
+}
+
+.header-logo{width:290px;height:82px;object-fit:cover;object-position:center;display:block;filter:drop-shadow(0 0 12px rgba(0,145,255,.28));border-radius:8px}.notify-btn{height:58px;border:1px solid #19ef82;border-radius:10px;background:linear-gradient(135deg,#052e28,#063d34);color:#bfffe7;padding:8px 14px;cursor:pointer;box-shadow:0 0 16px rgba(0,239,154,.18)}.notify-btn b{display:block;font-size:11px;color:#00f19a}.app-ready{height:58px;min-width:120px;border:1px solid #16a86c;border-radius:10px;background:#031c19;display:flex;align-items:center;gap:6px;padding:7px 11px;color:#00ef9a}.app-ready b,.app-ready small{display:block}.app-ready small{font-size:8px;color:#b1c9c3}.app-ready{font-size:22px}
+@media(max-width:900px){body{min-width:0;font-size:13px}.topbar{height:auto;min-height:92px;padding:8px 10px;flex-wrap:wrap;gap:8px}.logo{width:210px}.header-logo{width:210px;height:64px}.sub{position:absolute;left:12px;top:69px;margin:0;font-size:6px}.quote{display:none}.tools{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.sessions div{width:58px}.news{min-width:135px}.install{min-width:105px}.notify-btn{min-width:145px}.app-ready{min-width:110px}.layout{display:block}.side{width:100%;min-height:0;border-right:0;border-bottom:1px solid #143565;padding:6px;position:sticky;top:0;z-index:4}.side nav{display:flex;overflow-x:auto;gap:4px}.side a{height:40px;min-width:max-content;padding:0 10px;font-size:11px;gap:6px}.side a span{font-size:16px;width:auto}.promo{display:none}main{padding:8px}.ticker{grid-template-columns:repeat(2,1fr)}.ticker>div{height:65px;padding:9px}.gold{grid-column:1/-1}.gold strong{font-size:23px}.gold em{margin:38px 0 0 115px;font-size:9px}.grid{grid-template-columns:1fr;gap:8px}.notifications{grid-column:auto}.signalbox{font-size:39px}.chart{height:360px}.perfrow,.bottom{grid-template-columns:1fr}.perfgrid{grid-template-columns:repeat(4,1fr)}.riskgrid{grid-template-columns:repeat(3,1fr)}.mobile{min-height:180px}footer{height:auto;min-height:55px;flex-wrap:wrap;padding:9px 12px;gap:8px}footer i{margin:0!important}.table{min-width:680px}}
+@media(max-width:560px){.top-tools{display:none}.topbar{justify-content:center}.logo{width:230px}.header-logo{width:230px}.ticker{grid-template-columns:1fr 1fr}.ticker .gold{grid-column:1/-1}.signal-card h2{font-size:17px}.stats{grid-template-columns:1fr 1fr}.stats .timer{grid-column:1/-1}.entry{grid-template-columns:1fr 1fr}.analysis-row{font-size:10px}.perfgrid{grid-template-columns:1fr 1fr}.riskgrid{grid-template-columns:1fr 1fr 1fr}.bottom{gap:8px}.mobile{display:none}}
+</style></head><body><div class="bg"></div>
+<header><div class="logo"><img class="header-logo" src="lumora-header.png" alt="LUMORA"></div><div class="sub">BINARY TRADING&nbsp; | &nbsp;SMARTER TOGETHER</div><div class="quote">“Discipline Turns Signals<br>Into Freedom”</div><div class="tools"><div class="sessions"><div><b>SYD</b><strong>22:14</strong><em>Open</em></div><div><b>TKY</b><strong>00:14</strong><em>Open</em></div><div class="on"><b>LDN</b><strong>14:14</strong><em>Open</em></div><div><b>NY</b><strong>09:14</strong><em>Open</em></div></div><div class="news"><b>News Countdown</b><strong id="news">--:--</strong><small id="newsLabel">USD • next scheduled window</small></div><button id="install" class="install">📱 <b>Install App</b><small> Get Live Signals</small></button><button id="bell" class="notify-btn">🔔 <b>Enable Notifications</b></button><div id="appReady" class="app-ready">✓ <b>App Ready</b><small>Installed</small></div></div></header>
+<div class="layout"><aside class="side"><nav><a class="active nav" data-view="Dashboard"><span>⌂</span>Dashboard</a><a class="nav" data-view="Live Signals"><span>◉</span>Live Signals</a><a class="nav" data-view="Market"><span>▥</span>Market</a><a class="nav" data-view="Signal History"><span>◷</span>Signal History</a><a class="nav" data-view="Performance"><span>⌁</span>Performance</a><a class="nav" data-view="News & Calendar"><span>▣</span>News & Calendar</a><a class="nav" data-view="Settings"><span>⚙</span>Settings</a></nav><div class="promo"><div class="big">TRADE<br><b>GOLD</b><br>TRADE<br><strong>SMARTER</strong></div><div class="bars">▰<br>▰▰</div><b style="color:#12e0ff">◈ LUMORA</b><small>DISCIPLINE<br>BRINGS FREEDOM</small></div></aside>
+<div class="mobile-nav"><button>☰</button><b>LUMORA</b><button id="mBell">🔔</button></div><main>
+<section class="ticker"><div class="gold"><span style="font-size:25px;color:#ffd63b">◆</span><div><b>XAU/USD</b><small>GOLD</small></div><strong id="price">2641.39</strong><em id="chg">+2.36 (+0.09%)</em></div><div><small>Spread</small><b id="spread">--</b></div><div><small>ATR (M1)</small><b id="atr">2.15</b></div><div><small>Market Regime</small><b class="green">TRENDING</b></div><div class="session"><small>Session</small><b><i></i>London</b><em>Active</em></div><div class="bridge"><small>MT5 Bridge</small><b><i></i>CONNECTED</b></div></section>
+<section class="grid">
+<div class="signal card pad"><div class="title"><b>● LIVE SIGNAL</b><span class="ai">AI POWERED</span></div><h2>🔔 XAU/USD <small>• 30 SEC</small></h2><div id="signal" class="signalbox">WAITING <span>•</span></div><div id="entryStatus" class="entry-status">WAITING FOR MT5 SIGNAL</div><div class="stats"><div><small>Confidence</small><strong id="conf">89%</strong></div><div><small>Signal Score</small><strong id="score">8.6 / 10</strong></div><div class="timer"><small>Expiry In</small><div class="ring"><b id="count">00:26</b></div></div></div><div class="entry"><div><small>Entry</small><b id="entry">2641.48</b></div><div><small>Take Profit</small><b>N/A</b><em>(30 sec)</em></div><div><small>Stop Loss</small><b>N/A</b><em>(30 sec)</em></div><div><small>Risk</small><b>FIXED</b></div></div></div>
+<div class="chart card"><div class="title"><b>XAU/USD LIVE PRICE</b><div class="tabs"><b>M1</b><span>M5</span><span>M15</span><span>H1</span></div></div><div class="chartbox"><canvas id="cv"></canvas></div></div>
+<div class="analysis card"><div class="title"><b>MARKET ANALYSIS</b></div><div class="row"><span>EMA Fast (21)</span><b>2640.78 ↗</b></div><div class="row"><span>EMA Slow (50)</span><b>2640.43 ↗</b></div><div class="row"><span>RSI (14)</span><b>57.6 <em>Neutral</em></b></div><div class="row"><span>ATR</span><b>2.15 <em>Normal</em></b></div><div class="row"><span>Volume</span><b>1.32× <em class="green">High</em></b></div><div class="row"><span>Chop Level</span><b>0.32 <em class="green">Low</em></b></div><div class="pressure"><span>Buy Pressure <b>62%</b></span><div class="bar"><u style="width:62%"></u></div><span>Sell Pressure <b class="red">38%</b></span><div class="bar red"><u style="width:38%"></u></div></div></div>
+<div class="noti card"><div class="title"><b>LATEST NOTIFICATIONS</b><a style="font-size:10px">View All</a></div><div id="notilist"><article><time>14:14</time><span class="yellow">♟</span><div><b>NEW SIGNAL</b><strong>XAU/USD BUY</strong><small>30 Seconds<br>Confidence: 89%</small></div></article><article><time>14:13</time><span>◷</span><div><b>Expiry 10 seconds</b><strong>XAU/USD BUY</strong></div></article><article><time>14:13</time><span class="win">✓</span><div><b class="green">RESULT: WIN</b><strong>XAU/USD BUY</strong><small class="green">+$1.64 (82%)</small></div></article><article><time>14:12</time><span class="yellow">♟</span><div><b>NEW SIGNAL</b><strong>XAU/USD SELL</strong><small>30 Seconds</small></div></article><article><time>14:11</time><span class="red">×</span><div><b class="red">RESULT: LOSS</b><strong>XAU/USD SELL</strong><small class="red">-$2.00</small></div></article></div></div>
+</section>
+<section class="perfrow"><div class="perf card"><div class="title"><b>TODAY'S PERFORMANCE</b></div><div class="perfgrid"><div><small>Signals</small><b>19</b></div><div><small>Wins</small><b class="green">13</b></div><div><small>Losses</small><b class="red">6</b></div><div><small>Win Rate</small><b>68.4%</b></div><div><small>Profit</small><b class="green">+$24.60</b></div><div><small>Loss</small><b class="red">-$8.40</b></div><div><small>Net P/L</small><b style="color:#19e5ff">+$16.20</b></div></div></div><div class="risk card"><div class="title"><b>RISK MANAGEMENT</b></div><div class="riskgrid"><div><small>Stake</small><b>$2.00</b></div><div><small>Payout</small><b>80%</b></div><div><small>Risk</small><b>Fixed</b></div></div></div></section>
+<section class="bottom"><div class="recent card"><div class="title"><b>RECENT SIGNALS</b><a>View All →</a></div><table class="table"><thead><tr><th>Time</th><th>Signal</th><th>Result</th></tr></thead><tbody id="hist"></tbody></table></div><div class="flow card"><div class="title"><b>SESSION FLOW</b></div><div><div class="flowrow"><span>Sydney</span><b>Open</b><small>22:00 - 07:00</small></div><div class="flowrow"><span>Tokyo</span><b>Open</b><small>00:00 - 09:00</small></div><div class="flowrow current"><span>London</span><b>Open</b><small>08:00 - 17:00</small></div><div class="flowrow"><span>New York</span><b>Open</b><small>13:00 - 22:00</small></div></div></div><div class="mobile card"><div><b>Get Real-Time Signals<br>On Your Mobile</b><p>✓ Instant Notifications<br>✓ PWA – Install App<br>✓ Works on Android, iOS & PC</p><button id="install2">⬇ Install LUMORA App</button><small>Fast • Secure • Always Connected</small></div><div class="phone">L<br><b>LUMORA</b></div></div></section>
+</main></div><div id="pageView" class="page-view"><div class="page-card"><div class="title"><b id="pageTitle">LUMORA</b><button id="closePage">×</button></div><div id="pageContent"></div></div></div><footer><b style="font-size:17px;color:#edf5ff">LUMORA</b><span>© 2026 Lumora. Trade Smarter Together.</span><i style="margin:auto">REAL SIGNALS &nbsp;|&nbsp; REAL RESULTS &nbsp;|&nbsp; A BRIGHTER TRADING FUTURE</i><em>XAU/USD &nbsp;|&nbsp; 30 SECOND SIGNAL ENGINE &nbsp;|&nbsp; v2.0</em></footer><div id="toast" class="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+
+const state={
+  history:[],
+  market:{},
+  active:null,
+  candles:[],
+  connected:false,
+  lastSignal:null,
+  serverOffsetMs:0,
+  news:{target_epoch:0,label:'USD • next scheduled window'}
+};
+
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function num(v,d=2){const n=Number(v);return Number.isFinite(n)?n.toFixed(d):'—';}
+function epochForSignal(packet){
+  const d=packet?.data||{};
+  if(Number.isFinite(Number(d.signal_epoch))) return Number(d.signal_epoch);
+  if(Number.isFinite(Number(d.expiry_epoch))) return Number(d.expiry_epoch)-Number(d.expiry_seconds||30);
+  return Number(packet?.received_at||0);
+}
+function expiryEpoch(packet){
+  const d=packet?.data||{};
+  if(Number.isFinite(Number(d.expiry_epoch))) return Number(d.expiry_epoch);
+  return epochForSignal(packet)+Number(d.expiry_seconds||30);
+}
+function serverNowMs(){
+  return Date.now()+state.serverOffsetMs;
+}
+function timeText(packet){
+  const t=epochForSignal(packet);
+  if(!t)return '--:--';
+  return new Date(t*1000).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+function resultForSignal(packet){
+  if(packet?.result)return packet.result;
+  if(packet?.result_data?.result)return packet.result_data.result;
+  const sid=packet?.data?.signal_id;
+  const r=state.history.find(x=>x.event==='signal_result' && x.data?.signal_id===sid);
+  return r?.data?.result||'';
+}
+
+function closedSignals(){
+  const signals=[];
+  const byId={};
+  for(const p of state.history){
+    if(p.event==='signal'){
+      const sid=p.data?.signal_id;
+      if(sid){byId[sid]=p;signals.push(p);}
+    }
+  }
+  for(const p of state.history){
+    if(p.event==='signal_result'){
+      const sid=p.data?.signal_id;
+      if(sid&&byId[sid]){
+        byId[sid].result=p.data?.result||'';
+        byId[sid].result_data=p.data;
+      }
+    }
+  }
+  return signals.filter(s=>resultForSignal(s)==='WIN'||resultForSignal(s)==='LOSS')
+                .sort((a,b)=>epochForSignal(b)-epochForSignal(a));
+}
+
+function renderHistory(){
+  const list=closedSignals().slice(0,10);
+  $('hist').innerHTML=list.length?list.map(p=>{
+    const d=p.data||{},r=resultForSignal(p),pl=Number(p.result_data?.profit_usd??0);
+    return `<tr>
+      <td>${esc(timeText(p))}</td>
+      <td><span class="badge ${(d.side||'').toLowerCase()}">${esc(d.side||'—')}</span></td>
+      <td class="${r==='WIN'?'green':'red'}"><b>${r}</b></td>
+    </tr>`;
+  }).join(''):`<tr><td colspan="3" style="text-align:center;color:#8097b5;padding:20px">No completed signals yet</td></tr>`;
+}
+
+function performance(){
+  const list=closedSignals();
+  let wins=0,losses=0,profit=0,loss=0;
+  for(const p of list){
+    const r=resultForSignal(p),pl=Number(p.result_data?.profit_usd??0);
+    if(r==='WIN'){wins++;if(pl>0)profit+=pl;}
+    if(r==='LOSS'){losses++;if(pl<0)loss+=pl;}
+  }
+  const total=wins+losses,rate=total?wins/total*100:0,net=profit+loss;
+  document.querySelector('.perfgrid').innerHTML=`
+    <div><small>Signals</small><b>${total}</b></div>
+    <div><small>Wins</small><b class="green">${wins}</b></div>
+    <div><small>Losses</small><b class="red">${losses}</b></div>
+    <div><small>Win Rate</small><b>${rate.toFixed(1)}%</b></div>
+    <div><small>Profit</small><b class="green">+$${profit.toFixed(2)}</b></div>
+    <div><small>Loss</small><b class="red">-$${Math.abs(loss).toFixed(2)}</b></div>
+    <div><small>Net P/L</small><b style="color:#19e5ff">${net>=0?'+':''}$${net.toFixed(2)}</b></div>`;
+}
+
+function setConnection(ok){
+  state.connected=ok;
+  const b=document.querySelector('.bridge b');
+  const e=document.querySelector('.bridge em');
+  if(b){b.innerHTML=`<i></i>${ok?'CONNECTED':'WAITING'}`;b.style.color=ok?'#00ef9a':'#ffd23c';}
+  if(e)e.textContent=ok?'Nyao v43.0':'MT5 feed offline';
+}
+
+function setSignalCard(packet){
+  const d=packet?.data||{};
+  const side=d.side||'WAIT';
+  state.lastSignal=packet;
+  $('signal').className='signalbox '+(side==='BUY'?'buy':side==='SELL'?'sell':'wait');
+  $('signal').innerHTML=side==='WAIT'?'WAITING <span>•</span>':`${esc(side)} <span>${side==='BUY'?'▲':'▼'}</span>`;
+  $('conf').textContent=`${num(d.confidence,0)}%`;
+  $('score').textContent=`${num(d.score,1)} / 10`;
+  $('entry').textContent=num(d.entry_price);
+  updateSignalStatus();
+}
+
+function formatRemaining(total){
+  total=Math.max(0,Math.floor(Number(total)||0));
+  const m=Math.floor(total/60), sec=total%60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function updateSignalStatus(){
+  const p=state.active;
+  const box=$('entryStatus');
+  if(!p){
+    // No authoritative active signal: clear ALL fields from the previous signal.
+    // This prevents an expired/closed BUY or SELL from looking like a live signal.
+    state.lastSignal=null;
+    $('signal').className='signalbox wait';
+    $('signal').innerHTML='WAITING <span>•</span>';
+    $('count').textContent='--:--';
+    $('conf').textContent='--';
+    $('score').textContent='-- / 10';
+    $('entry').textContent='—';
+    box.className='entry-status';
+    box.textContent='WAITING FOR NEXT MT5 SIGNAL';
+    return;
+  }
+  const d=p.data||{};
+  const exp=expiryEpoch(p);
+  const now=Math.floor(serverNowMs()/1000);
+  const remaining=Math.max(0,exp-now);
+  $('count').textContent=formatRemaining(remaining);
+  const side=d.side||'WAIT';
+  if(remaining<=0){
+    box.className='entry-status expired';
+    box.textContent='EXPIRED — WAIT FOR NEXT SIGNAL';
+    $('count').textContent='00:00';
+    // Do not replace the signal immediately here; the server/result packet is
+    // authoritative. The next state poll/SSE packet will clear it cleanly.
+    return;
+  }
+  // Give a clear execution window: first 20 seconds = timely, final 10 seconds = late.
+  if(remaining>10){
+    box.className='entry-status now';
+    box.textContent=`ENTER NOW • ${side} SIGNAL VALID`;
+  }else{
+    box.className='entry-status late';
+    box.textContent=`LATE • ${side} • ${remaining}s LEFT`;
+  }
+}
+
+function _digitsForSpread(){
+  const p=Number(state.market?.bid||0);
+  return p>=1000?2:4;
+}
+
+function updateMarket(d){
+  if(!d)return;
+  state.market=d;
+  if(Number.isFinite(Number(d.bid))) $('price').textContent=num(d.bid);
+  // Prefer broker-calculated spread in points so the card shows the real MT5 spread,
+  // not a rounded price difference. Keep price spread as a fallback.
+  const spreadPts=Number(d.spread_points);
+  const liveSpread=(Number.isFinite(Number(d.ask))&&Number.isFinite(Number(d.bid))) ? (Number(d.ask)-Number(d.bid)) : Number(d.spread);
+  if(Number.isFinite(spreadPts)) $('spread').textContent=`${num(spreadPts,1)} pts`;
+  else if(Number.isFinite(liveSpread)) $('spread').textContent=num(liveSpread,2);
+  // Keep a browser-side fallback from the raw quote difference when an older EA
+  // does not send spread_points.
+  if(!Number.isFinite(spreadPts) && Number.isFinite(liveSpread) && liveSpread>0){
+    $('spread').title=`Live spread: ${num(liveSpread, _digitsForSpread())}`;
+  } else if(Number.isFinite(spreadPts)){
+    $('spread').title=`Live MT5 spread: ${num(spreadPts,1)} points (${num(liveSpread,2)} price)`;
+  }
+  if(Number.isFinite(Number(d.atr))) $('atr').textContent=num(d.atr);
+  if(Number.isFinite(Number(d.rsi))) updatePageMarket(d);
+  if(Array.isArray(d.candles)&&d.candles.length){state.candles=d.candles;window.mt5Candles=state.candles;}
+  setConnection(true);
+  updateAnalysis(d);
+  chart();
+}
+
+function updateAnalysis(d){
+  const rows=document.querySelectorAll('.analysis .row b');
+  if(rows[0]&&d.ema_fast!=null)rows[0].textContent=num(d.ema_fast)+' ↗';
+  if(rows[1]&&d.ema_slow!=null)rows[1].textContent=num(d.ema_slow)+' ↗';
+  if(rows[2]&&d.rsi!=null)rows[2].innerHTML=`${num(d.rsi,1)} <em>${Number(d.rsi)>70?'Overbought':Number(d.rsi)<30?'Oversold':'Neutral'}</em>`;
+  if(rows[3]&&d.atr!=null)rows[3].innerHTML=`${num(d.atr)} <em>Live</em>`;
+}
+
+function updatePageMarket(d){
+  const q=$('pageQuote');if(q)q.textContent=`${num(d.bid)} / ${num(d.ask)}`;
+  const a=$('pageAtr');if(a)a.textContent=num(d.atr);
+  const r=$('pageRsi');if(r)r.textContent=num(d.rsi,1);
+}
+
+function renderNotifications(){
+  const items=[];
+  const closed=closedSignals().slice(0,5);
+  if(state.active){
+    const d=state.active.data||{};
+    items.push(`<article><time>${esc(timeText(state.active))}</time><span class="yellow">♟</span><div><b>NEW SIGNAL</b><strong>XAU/USD ${esc(d.side)}</strong><small>30 Seconds<br>Confidence: ${num(d.confidence,0)}%</small></div></article>`);
+  }
+  for(const p of closed){
+    const d=p.data||{},r=resultForSignal(p);
+    items.push(`<article><time>${esc(timeText(p))}</time><span class="${r==='WIN'?'win':'red'}">${r==='WIN'?'✓':'×'}</span><div><b class="${r==='WIN'?'green':'red'}">RESULT: ${r}</b><strong>XAU/USD ${esc(d.side)}</strong></div></article>`);
+  }
+  $('notilist').innerHTML=items.join('')||'<article><time>--:--</time><span>•</span><div><b>WAITING</b><small>Waiting for MT5 signal feed</small></div></article>';
+}
+
+function applyPacket(packet){
+  if(!packet)return;
+  if(packet.event==='market'){
+    updateMarket(packet.data||{});
+    return;
+  }
+  if(packet.event==='signal'){
+    const sid=packet.data?.signal_id;
+    if(sid && !state.history.some(x=>x.event==='signal' && x.data?.signal_id===sid)) state.history.push(packet);
+    state.active=packet;
+    setSignalCard(packet);
+    renderNotifications();
+    renderHistory();
+    performance();
+    showToast(`🔔 NEW SIGNAL • XAU/USD ${packet.data?.side||''} • 30 SEC • ${num(packet.data?.confidence,0)}%`);
+    notifySignal(packet);
+    chart();
+    return;
+  }
+  if(packet.event==='signal_result'){
+    const sid=packet.data?.signal_id;
+    if(!state.history.some(x=>x.event==='signal_result' && x.data?.signal_id===sid)) state.history.push(packet);
+    if(state.active?.data?.signal_id===sid){
+      state.active=null;
+      updateSignalStatus();
+    }
+    renderHistory();
+    performance();
+    renderNotifications();
+    showToast(`✓ RESULT: ${packet.data?.result||'CLOSED'} • XAU/USD ${packet.data?.side||''}`);
+    updateSignalStatus();
+    chart();
+  }
+}
+
+function rebuildFromHistory(history,active){
+  state.history=Array.isArray(history)?history:[];
+  // IMPORTANT: only the server's authoritative active_signal may drive the LIVE card.
+  // Never resurrect an old signal merely because its result packet is missing.
+  state.active=active||null;
+  renderHistory();
+  performance();
+  renderNotifications();
+  if(state.active)setSignalCard(state.active); else updateSignalStatus();
+}
+
+async function loadState(){
+  try{
+    const r=await fetch('/api/v1/state',{cache:'no-store'});
+    const d=await r.json();
+    if(Number.isFinite(Number(d.server_epoch))) state.serverOffsetMs=Number(d.server_epoch)*1000-Date.now();
+    state.news=d.news||state.news;
+    state.market=d.market||{};
+    rebuildFromHistory(d.history||[],d.active_signal||null);
+    if(state.market.bid)updateMarket(state.market);
+    else setConnection(false);
+  }catch(e){
+    setConnection(false);
+    showToast('MT5 server connection unavailable.');
+  }
+}
+
+function chart(){
+  const c=$('cv');if(!c)return;
+  const x=c.getContext('2d'),dpr=window.devicePixelRatio||1;
+  const rect=c.getBoundingClientRect(),w=Math.max(420,Math.floor(rect.width*dpr)),h=Math.max(250,Math.floor(rect.height*dpr));
+  if(c.width!==w||c.height!==h){c.width=w;c.height=h;}
+  x.clearRect(0,0,w,h);
+
+  // Spacious grid for a clean line-chart view.
+  x.strokeStyle='#1760a033';x.lineWidth=Math.max(1,dpr);
+  for(let y=18*dpr;y<h;y+=48*dpr){x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke();}
+  for(let xx=30*dpr;xx<w;xx+=72*dpr){x.beginPath();x.moveTo(xx,0);x.lineTo(xx,h);x.stroke();}
+
+  let arr=Array.isArray(state.candles)?state.candles:[];
+  if(arr.length>36) arr=arr.slice(-36); // fewer points = larger, clearer movement
+  const closes=arr.map(v=>Number(v.close)).filter(Number.isFinite);
+  if(closes.length<2){
+    x.fillStyle='#6e87a6';x.font=`${13*dpr}px Arial`;x.textAlign='center';
+    x.fillText('Waiting for live MT5 price data…',w/2,h/2);return;
+  }
+
+  let min=Math.min(...closes),max=Math.max(...closes);
+  let range=Math.max(max-min,0.20);
+  min-=range*0.16;max+=range*0.16;
+  const padTop=28*dpr,padBottom=28*dpr,left=22*dpr,right=22*dpr;
+  const plotH=h-padTop-padBottom;
+  const Y=v=>padTop+(max-Number(v))/(max-min)*plotH;
+  const step=(w-left-right)/Math.max(1,closes.length-1);
+
+  // Draw a bold price line instead of candles.
+  x.beginPath();
+  closes.forEach((v,i)=>{
+    const xx=left+i*step,yy=Y(v);
+    if(i===0)x.moveTo(xx,yy);else x.lineTo(xx,yy);
+  });
+  x.strokeStyle='#13e6c7';
+  x.lineWidth=3*dpr;
+  x.lineJoin='round';x.lineCap='round';x.stroke();
+
+  // Subtle area fill under the line.
+  x.beginPath();
+  closes.forEach((v,i)=>{
+    const xx=left+i*step,yy=Y(v);
+    if(i===0)x.moveTo(xx,yy);else x.lineTo(xx,yy);
+  });
+  x.lineTo(left+(closes.length-1)*step,h-padBottom);
+  x.lineTo(left,h-padBottom);x.closePath();
+  const grad=x.createLinearGradient(0,padTop,0,h-padBottom);
+  grad.addColorStop(0,'#0de5c72b');grad.addColorStop(1,'#0de5c700');
+  x.fillStyle=grad;x.fill();
+
+  // Latest price marker.
+  const lastX=left+(closes.length-1)*step,lastY=Y(closes[closes.length-1]);
+  x.beginPath();x.arc(lastX,lastY,5*dpr,0,Math.PI*2);x.fillStyle='#13e6c7';x.fill();
+  x.beginPath();x.arc(lastX,lastY,10*dpr,0,Math.PI*2);x.strokeStyle='#13e6c744';x.lineWidth=2*dpr;x.stroke();
+
+  // Latest price badge.
+  const priceLabel=num(closes[closes.length-1]);
+  x.font=`bold ${12*dpr}px Arial`;
+  const tw=x.measureText(priceLabel).width+18*dpr;
+  const lx=Math.max(6*dpr,Math.min(w-tw-6*dpr,lastX+10*dpr));
+  const ly=Math.max(25*dpr,Math.min(h-8*dpr,lastY+4*dpr));
+  x.fillStyle='#020817f2';x.fillRect(lx,ly-17*dpr,tw,25*dpr);
+  x.strokeStyle='#13e6c7';x.lineWidth=1.5*dpr;x.strokeRect(lx,ly-17*dpr,tw,25*dpr);
+  x.fillStyle='#fff';x.textAlign='left';x.fillText(priceLabel,lx+9*dpr,ly+1*dpr);
+
+  // Signal entry line + large directional marker.
+  if(state.active?.data?.entry_price){
+    const ep=Number(state.active.data.entry_price),side=String(state.active.data.side||'').toUpperCase();
+    if(Number.isFinite(ep)&&(side==='BUY'||side==='SELL')){
+      const marker=side==='BUY'?'#00ef9a':'#ff4e68';
+      const yy=Y(ep);
+      if(yy>=0&&yy<=h){
+        x.strokeStyle=marker;x.lineWidth=2*dpr;x.setLineDash([8*dpr,5*dpr]);
+        x.beginPath();x.moveTo(0,yy);x.lineTo(w,yy);x.stroke();x.setLineDash([]);
+
+        const label=`${side}  ${num(ep)}  •  ${formatRemaining(Math.max(0,expiryEpoch(state.active)-Math.floor(serverNowMs()/1000)))}`;
+        x.font=`bold ${12*dpr}px Arial`;
+        const lw=x.measureText(label).width+18*dpr;
+        const labelX=Math.max(6*dpr,Math.min(w-lw-6*dpr,lastX-105*dpr));
+        const labelY=Math.max(28*dpr,yy-8*dpr);
+        x.fillStyle='#020817f2';x.fillRect(labelX,labelY-17*dpr,lw,25*dpr);
+        x.strokeStyle=marker;x.lineWidth=1.5*dpr;x.strokeRect(labelX,labelY-17*dpr,lw,25*dpr);
+        x.fillStyle='#fff';x.textAlign='left';x.fillText(label,labelX+9*dpr,labelY+1*dpr);
+
+        // Big BUY / SELL arrow near the latest point.
+        x.fillStyle=marker;x.beginPath();
+        if(side==='BUY'){
+          x.moveTo(lastX,yy-34*dpr);x.lineTo(lastX-14*dpr,yy-12*dpr);x.lineTo(lastX-5*dpr,yy-12*dpr);
+          x.lineTo(lastX-5*dpr,yy+6*dpr);x.lineTo(lastX+5*dpr,yy+6*dpr);x.lineTo(lastX+5*dpr,yy-12*dpr);x.lineTo(lastX+14*dpr,yy-12*dpr);
+        }else{
+          x.moveTo(lastX,yy+34*dpr);x.lineTo(lastX-14*dpr,yy+12*dpr);x.lineTo(lastX-5*dpr,yy+12*dpr);
+          x.lineTo(lastX-5*dpr,yy-6*dpr);x.lineTo(lastX+5*dpr,yy-6*dpr);x.lineTo(lastX+5*dpr,yy+12*dpr);x.lineTo(lastX+14*dpr,yy+12*dpr);
+        }
+        x.closePath();x.fill();
+      }
+    }
+  }
+}
+
+function updateNewsCountdown(){
+  const el=$('news');
+  if(!el)return;
+  const target=Number(state.news?.target_epoch||0);
+  if(!target){el.textContent='--:--';return;}
+  const remaining=Math.max(0,target-Math.floor(serverNowMs()/1000));
+  const m=Math.floor(remaining/60),sec=remaining%60;
+  el.textContent=`${m}m ${String(sec).padStart(2,'0')}s`;
+  const label=$('newsLabel');
+  if(label)label.textContent=remaining<=0?'USD • event window':'USD • next scheduled window';
+}
+
+function showToast(msg){
+  $('toast').textContent=msg;$('toast').classList.add('show');
+  clearTimeout(showToast.t);showToast.t=setTimeout(()=>$('toast').classList.remove('show'),3500);
+}
+
+async function notifySignal(packet){
+  if(!('Notification'in window)||Notification.permission!=='granted')return;
+  try{
+    const d=packet.data||{};
+    new Notification(`LUMORA • XAU/USD ${d.side||''}`,{
+      body:`30 second signal • ${num(d.confidence,0)}% confidence • Entry ${num(d.entry_price)}`,
+      icon:'icon-192.png',
+      tag:d.signal_id||'lumora-signal'
+    });
+  }catch(e){}
+}
+
+$('bell').onclick=async()=>{
+  if(!('Notification'in window)){showToast('Notifications are not supported in this browser.');return;}
+  try{
+    const p=await Notification.requestPermission();
+    if(p==='granted'){
+      $('bell').innerHTML='✓ <b>Notifications Enabled</b>';
+      new Notification('LUMORA Notifications Enabled',{body:'You will receive new 30-second signal notifications.',icon:'icon-192.png'});
+      showToast('Notifications enabled.');
+    }else showToast('Notification permission was not granted.');
+  }catch(e){showToast('Could not enable notifications.');}
+};
+$('mBell')?.addEventListener('click',()=>$('bell').click());
+
+let deferred=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferred=e;$('install').classList.add('show');
+});
+async function install(){
+  if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
+    showToast('LUMORA is already installed.');return;
+  }
+  if(deferred){
+    deferred.prompt();
+    try{await deferred.userChoice;}catch(e){}
+    deferred=null;return;
+  }
+  showToast('Install is available when opened from HTTPS or localhost.');
+}
+$('install').onclick=install;$('install2').onclick=install;
+window.addEventListener('appinstalled',()=>{
+  $('appReady').innerHTML='✓ <b>App Ready</b><small>Installed</small>';
+  $('install').style.display='none';
+  showToast('LUMORA installed successfully.');
+});
+if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
+  $('appReady').innerHTML='✓ <b>App Ready</b><small>Installed</small>';
+}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// Functional navigation panels
+function pageHTML(view){
+  if(view==='Live Signals')return `<h2>Live Signals</h2><p>Live XAU/USD 30-second signals received directly from the connected MT5 EA.</p><div class="row"><span>Current signal</span><b>${esc(state.active?.data?.side||'WAITING')}</b></div><div class="row"><span>Entry</span><b>${state.active?num(state.active.data?.entry_price):'—'}</b></div><div class="row"><span>Status</span><b id="pageSignalStatus">—</b></div>`;
+  if(view==='Market')return `<h2>Market</h2><p>Live XAU/USD M1 market data from MT5.</p><div class="row"><span>Bid / Ask</span><b id="pageQuote">—</b></div><div class="row"><span>ATR</span><b id="pageAtr">—</b></div><div class="row"><span>RSI</span><b id="pageRsi">—</b></div><div class="row"><span>EMA Fast</span><b>${num(state.market.ema_fast)}</b></div><div class="row"><span>EMA Slow</span><b>${num(state.market.ema_slow)}</b></div>`;
+  if(view==='Signal History')return `<h2>Signal History</h2><p>Completed signals only — WIN / LOSS.</p><div style="overflow:auto"><table class="table"><thead><tr><th>Time</th><th>Signal</th><th>Result</th></tr></thead><tbody id="pageHistory"></tbody></table></div>`;
+  if(view==='Performance'){const list=closedSignals();const w=list.filter(p=>resultForSignal(p)==='WIN').length,l=list.filter(p=>resultForSignal(p)==='LOSS').length,t=w+l;return `<h2>Performance</h2><p>Calculated from completed MT5 signal results.</p><div class="perfgrid"><div><small>Signals</small><b>${t}</b></div><div><small>Wins</small><b class="green">${w}</b></div><div><small>Losses</small><b class="red">${l}</b></div><div><small>Win Rate</small><b>${t?(w/t*100).toFixed(1):'0.0'}%</b></div></div>`;}
+  if(view==='News & Calendar')return `<h2>News & Calendar</h2><p>News countdown area. The MT5 signal engine remains the source of trading signals.</p><div class="row"><span>USD news status</span><b id="pageNews">--:--</b></div>`;
+  return `<h2>Settings</h2><p>LUMORA terminal settings and connection status.</p><div class="row"><span>MT5 Bridge</span><b>${state.connected?'CONNECTED':'WAITING'}</b></div><div class="row"><span>Signal Expiry</span><b>30 seconds</b></div>`;
+}
+function openPage(view){
+  if(view==='Dashboard'){$('pageView').style.display='none';return;}
+  $('pageTitle').textContent='LUMORA • '+view;
+  $('pageContent').innerHTML=pageHTML(view);
+  $('pageView').style.display='block';
+  if(view==='Signal History'){
+    const ph=$('pageHistory');
+    if(ph)ph.innerHTML=closedSignals().slice(0,50).map(p=>{
+      const d=p.data||{},r=resultForSignal(p),pl=Number(p.result_data?.profit_usd??0);
+      return `<tr><td>${esc(timeText(p))}</td><td><span class="badge ${(d.side||'').toLowerCase()}">${esc(d.side||'')}</span></td><td class="${r==='WIN'?'green':'red'}"><b>${r}</b></td></tr>`;
+    }).join('')||'<tr><td colspan="3">No completed signals.</td></tr>';
+  }
+  if(view==='Market')updatePageMarket(state.market);
+}
+document.querySelectorAll('.nav').forEach(a=>a.addEventListener('click',()=>{
+  document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
+  a.classList.add('active');openPage(a.dataset.view);
+}));
+$('closePage').onclick=()=>$('pageView').style.display='none';
+
+// Server-authoritative countdown: refresh never resets it.
+setInterval(()=>{updateSignalStatus(); updateNewsCountdown(); chart();},250);
+setInterval(()=>{if(state.active && expiryEpoch(state.active)<=Math.floor(serverNowMs()/1000)){ updateSignalStatus(); }},250);
+setInterval(()=>{loadState();},1000);
+
+// Live SSE
+function connectSSE(){
+  try{
+    const es=new EventSource('/api/v1/events');
+    es.onmessage=e=>{try{applyPacket(JSON.parse(e.data));}catch(x){}};
+    es.onerror=()=>setConnection(false);
+    return es;
+  }catch(e){setConnection(false);return null;}
+}
+
+loadState().then(()=>{connectSSE();chart();});
+renderHistory();performance();renderNotifications();updateSignalStatus();updateNewsCountdown();chart();
+</script></body></html>
