@@ -231,9 +231,8 @@ async function handle(req, res) {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(204).end();
 
-  const pathParts = req.query?.path;
-  const path = Array.isArray(pathParts) ? pathParts.join('/') : String(pathParts || '');
-  const route = '/' + path;
+  const requestUrl = new URL(req.url || '/', 'https://lumora.local');
+  const route = requestUrl.pathname;
   const db = getPool();
 
   if (route === '/health') {
