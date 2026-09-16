@@ -263,7 +263,14 @@ async function handle(req, res) {
       const data = { ...(input.data || {}) };
       const now = Math.floor(Date.now() / 1000);
 
-      if (event === 'signal') {
+      if (event === 'signal_wait') {
+        return send(res, 200, {
+            ok: true,
+            event: 'signal_wait'
+        });
+    }
+      
+    if (event === 'signal') {
         const expirySeconds = Math.max(1, Math.floor(number(data.expiry_seconds, 30)));
         data.signal_epoch = now;
         data.expiry_epoch = now + expirySeconds;
