@@ -601,16 +601,8 @@ setInterval(()=>{updateSignalStatus(); updateNewsCountdown(); chart();},250);
 setInterval(()=>{if(state.active && expiryEpoch(state.active)<=Math.floor(serverNowMs()/1000)){ updateSignalStatus(); }},250);
 setInterval(()=>{loadState();},1000);
 
-// Live SSE
-function connectSSE(){
-  try{
-    const es=new EventSource('/api/v1/events');
-    es.onmessage=e=>{try{applyPacket(JSON.parse(e.data));}catch(x){}};
-    es.onerror=()=>setConnection(false);
-    return es;
-  }catch(e){setConnection(false);return null;}
-}
-
-loadState().then(()=>{connectSSE();chart();});
+// Vercel production uses short-lived API requests + 1-second state polling.
+// This replaces the long-lived local SSE connection, which is not required for the dashboard.
+loadState().then(()=>{chart();});
 renderHistory();performance();renderNotifications();updateSignalStatus();updateNewsCountdown();chart();
 </script></body></html>

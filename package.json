@@ -1,0 +1,13 @@
+{
+  "name": "lumora-30sec-signal",
+  "version": "10.0.0",
+  "private": true,
+  "description": "LUMORA 30-second XAU/USD signal dashboard and Vercel API",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "import:data": "node scripts/import-data.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}
