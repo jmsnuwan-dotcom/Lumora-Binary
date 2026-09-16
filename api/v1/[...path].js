@@ -252,11 +252,11 @@ async function handle(req, res) {
   try {
     await ensureSchema(db);
 
-    if (route === '/api/v1/state' || route === '/v1/state') {
+    if (route === '/api/v1/state' || route === '/v1/state' || route === '/state') {
       return send(res, 200, await state(db));
     }
 
-    if (route === '/api/v1/signals' || route === '/v1/signals') {
+    if (route === '/api/v1/signals' || route === '/v1/signals' || route === '/signals') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
       const event = input.event || 'signal';
@@ -297,7 +297,7 @@ async function handle(req, res) {
       return send(res, 400, { ok: false, error: 'unsupported event' });
     }
 
-    if (route === '/api/v1/market' || route === '/v1/market') {
+    if (route === '/api/v1/market' || route === '/v1/market' || route === '/market') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
       const data = { ...(input.data || {}) };
