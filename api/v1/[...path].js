@@ -18,9 +18,19 @@ function getPool() {
   return pool;
 }
 
-async function ensureSchema(db) {
-  if (!schemaPromise) {
-    schemaPromise = db.query(`
+async function createSchemaSafely(db) {
+  // Vercel can run multiple serverless instances at the same time.
+  // An in-process promise is not enough because each instance has its own memory.
+  // PostgreSQL advisory transaction locking prevents concurrent DDL races.
+  const client = await db.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    // Transaction-scoped lock: it is released automatically on COMMIT/ROLLBACK.
+    await client.query('SELECT pg_advisory_xact_lock($1)', [83920101]);
+
+    await client.query(`
       CREATE TABLE IF NOT EXISTS lumora_signals (
         id BIGSERIAL PRIMARY KEY,
         signal_id TEXT UNIQUE NOT NULL,
@@ -35,8 +45,13 @@ async function ensureSchema(db) {
         result_received_at BIGINT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
-      CREATE INDEX IF NOT EXISTS lumora_signals_expiry_idx ON lumora_signals(expiry_epoch);
-      CREATE INDEX IF NOT EXISTS lumora_signals_created_idx ON lumora_signals(created_at DESC);
+
+      CREATE INDEX IF NOT EXISTS lumora_signals_expiry_idx
+        ON lumora_signals(expiry_epoch);
+
+      CREATE INDEX IF NOT EXISTS lumora_signals_created_idx
+        ON lumora_signals(created_at DESC);
+
       CREATE TABLE IF NOT EXISTS lumora_market (
         id INTEGER PRIMARY KEY,
         packet JSONB NOT NULL,
@@ -44,7 +59,27 @@ async function ensureSchema(db) {
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
     `);
+
+    await client.query('COMMIT');
+  } catch (e) {
+    try {
+      await client.query('ROLLBACK');
+    } catch (_) {}
+    throw e;
+  } finally {
+    client.release();
   }
+}
+
+async function ensureSchema(db) {
+  if (!schemaPromise) {
+    schemaPromise = createSchemaSafely(db).catch((e) => {
+      // Do not permanently cache a failed initialization.
+      schemaPromise = null;
+      throw e;
+    });
+  }
+
   await schemaPromise;
 }
 
