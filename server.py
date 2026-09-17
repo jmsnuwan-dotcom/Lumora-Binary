@@ -2,7 +2,7 @@ import json, os, threading, time
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse
 
-VERSION='LUMORA_V9_LIVE_SIGNAL_FIX'
+VERSION='LUMORA_V12_NO_TRADE_HISTORY'
 ROOT=os.path.dirname(os.path.abspath(__file__))
 STATE=os.path.join(ROOT,'data.json')
 lock=threading.Lock()
@@ -273,7 +273,7 @@ class Handler(SimpleHTTPRequestHandler):
                 if changed or cleaned:
                     save()
                 payload={
-                    'history':history[-300:],
+                    'history':[],
                     'market':market,
                     'active_signal':active_signal,
                     'news':{'target_epoch':news_target,'label':'USD • next scheduled window'},
@@ -284,7 +284,7 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
         if path=='/health':
-            self.send_json({'ok':True,'clients':len(clients),'history':len(history),'version':VERSION})
+            self.send_json({'ok':True,'clients':len(clients),'history':[],'version':VERSION})
             return
 
         return super().do_GET()
