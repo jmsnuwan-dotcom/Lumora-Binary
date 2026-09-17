@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const VERSION = 'LUMORA_V12_NO_TRADE_HISTORY';
+const VERSION = 'LUMORA_V13_MARKET_SIGNAL_FIXED_NO_TRADE_HISTORY';
 let pool;
 let schemaPromise;
 
@@ -19,11 +19,15 @@ function getPool() {
 }
 
 async function createSchemaSafely(db) {
-  // Multiple Vercel instances can initialize simultaneously. A PostgreSQL
-  // transaction advisory lock prevents concurrent CREATE TABLE/INDEX races.
+  // Vercel can run multiple serverless instances at the same time.
+  // An in-process promise is not enough because each instance has its own memory.
+  // PostgreSQL advisory transaction locking prevents concurrent DDL races.
   const client = await db.connect();
+
   try {
     await client.query('BEGIN');
+
+    // Transaction-scoped lock: it is released automatically on COMMIT/ROLLBACK.
     await client.query('SELECT pg_advisory_xact_lock($1)', [83920101]);
 
     await client.query(`
@@ -41,10 +45,13 @@ async function createSchemaSafely(db) {
         result_received_at BIGINT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
+
       CREATE INDEX IF NOT EXISTS lumora_signals_expiry_idx
         ON lumora_signals(expiry_epoch);
+
       CREATE INDEX IF NOT EXISTS lumora_signals_created_idx
         ON lumora_signals(created_at DESC);
+
       CREATE TABLE IF NOT EXISTS lumora_market (
         id INTEGER PRIMARY KEY,
         packet JSONB NOT NULL,
@@ -55,7 +62,9 @@ async function createSchemaSafely(db) {
 
     await client.query('COMMIT');
   } catch (e) {
-    try { await client.query('ROLLBACK'); } catch (_) {}
+    try {
+      await client.query('ROLLBACK');
+    } catch (_) {}
     throw e;
   } finally {
     client.release();
@@ -65,10 +74,12 @@ async function createSchemaSafely(db) {
 async function ensureSchema(db) {
   if (!schemaPromise) {
     schemaPromise = createSchemaSafely(db).catch((e) => {
+      // Do not permanently cache a failed initialization.
       schemaPromise = null;
       throw e;
     });
   }
+
   await schemaPromise;
 }
 
@@ -187,8 +198,8 @@ async function settleExpired(db, now) {
 async function state(db) {
   const now = Math.floor(Date.now() / 1000);
 
-  // Keep internal records for 30-second settlement, but never expose
-  // trade/signal history to the dashboard.
+  // Keep signals internally for expiry/result processing,
+  // but do NOT expose trade history to the dashboard/API state response.
   await settleExpired(db, now);
 
   const market = await getMarket(db);
@@ -222,7 +233,8 @@ async function handle(req, res) {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(204).end();
 
-  // Use the real HTTP pathname for reliable Vercel catch-all routing.
+  // Use the real HTTP pathname first. This is reliable for Vercel catch-all
+  // functions and avoids req.query.path differences between deployments.
   let route = '/';
   try {
     const requestUrl = new URL(req.url || '/', 'https://lumora.local');
@@ -232,6 +244,8 @@ async function handle(req, res) {
     const path = Array.isArray(pathParts) ? pathParts.join('/') : String(pathParts || '');
     route = '/' + path.replace(/^\/+/, '');
   }
+
+  // Normalize trailing slashes.
   if (route.length > 1) route = route.replace(/\/+$/, '');
 
   const db = getPool();
@@ -255,15 +269,15 @@ async function handle(req, res) {
   try {
     await ensureSchema(db);
 
-    if (route === '/api/v1/state' || route === '/v1/state') {
+    if (route === '/api/v1/state' || route === '/v1/state' || route === '/state') {
       return send(res, 200, await state(db));
     }
 
-    if (route === '/api/v1/signals' || route === '/v1/signals') {
+    if (route === '/api/v1/signals' || route === '/v1/signals' || route === '/signals') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
 
-      // Accept the normal event field plus common aliases/variants.
+      // Accept event, eventType, or type and normalize common variants.
       const rawEvent =
         input.event ??
         input.eventType ??
@@ -298,7 +312,8 @@ async function handle(req, res) {
         });
       }
 
-      if (event === 'signal') {
+
+    if (event === 'signal') {
         const expirySeconds = Math.max(1, Math.floor(number(data.expiry_seconds, 30)));
         data.signal_epoch = now;
         data.expiry_epoch = now + expirySeconds;
@@ -336,10 +351,15 @@ async function handle(req, res) {
       });
     }
 
-    if (route === '/api/v1/market' || route === '/v1/market') {
+    if (route === '/api/v1/market' || route === '/v1/market' || route === '/market') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
-      const data = { ...(input.data || {}) };
+      const data =
+        input.data && typeof input.data === 'object' && !Array.isArray(input.data)
+          ? { ...input.data }
+          : { ...input };
+      delete data.event;
+      delete data.eventType;
       const now = Math.floor(Date.now() / 1000);
       const bid = number(data.bid), ask = number(data.ask);
       if (bid > 0 && ask > 0) {
