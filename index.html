@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#020817"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>LUMORA — 30 Second Signals</title>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#020817"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>LUMORA — 30 Second Signals</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#020817;color:#eef7ff;font-family:Arial,Segoe UI,sans-serif;min-width:1180px;font-size:14px}.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 42% 5%,#063a72 0,transparent 27%),radial-gradient(circle at 90% 80%,#26005d 0,transparent 27%),linear-gradient(120deg,#020817,#020512 60%,#080018)}
 header{height:108px;border-bottom:1px solid #143c75;display:flex;align-items:center;padding:10px 25px;gap:22px;background:#02091af2}.logo{display:flex;align-items:center;gap:8px}.mark{width:72px;height:72px;border:3px solid #12caff;border-radius:17px;display:grid;place-items:center;font-size:35px;box-shadow:0 0 22px #075fff,0 0 25px #b11cff}.word{font-size:49px;font-weight:900;letter-spacing:-4px;background:linear-gradient(90deg,#fff,#e9f4ff,#09bfff,#b93cff);-webkit-background-clip:text;color:transparent}.sub{font-size:8px;letter-spacing:.2em;color:#a4bbd9;margin-left:-270px;margin-top:78px}.quote{font-style:italic;color:#cbdcff;font-size:16px;line-height:1.4;margin-left:25px}.tools{margin-left:auto;display:flex;gap:9px;align-items:center}.sessions{display:flex;border:1px solid #174582;border-radius:8px;overflow:hidden}.sessions div{width:72px;text-align:center;padding:7px;border-right:1px solid #173b70}.sessions div:last-child{border:0}.sessions b,.sessions strong,.sessions em{display:block}.sessions b{font-size:10px;color:#9eb5d3}.sessions strong{font-size:14px}.sessions em{font-size:10px;color:#00f19a;font-style:normal}.sessions .on{box-shadow:inset 0 -2px #12dfff}.news{border:1px solid #174582;border-radius:8px;padding:7px 12px;min-width:155px}.news b,.news strong,.news small{display:block}.news b{font-size:10px}.news strong{font-size:18px;color:#ff6170}.news small{font-size:8px;color:#9db0ca}.install{display:none;border:1px solid #00caff;border-radius:10px;background:linear-gradient(135deg,#043e67,#5a13a8);color:#fff;padding:10px 15px;box-shadow:0 0 22px #075cff55;cursor:pointer}.install.show{display:block}.bell{background:none;border:0;color:#ff4f5d;font-size:23px;position:relative}.bell i{position:absolute;background:#ff3c4e;color:#fff;border-radius:50%;font-size:10px;padding:4px 7px;top:-6px;right:-5px}.profile{display:flex;gap:8px;align-items:center}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#506887}.profile b,.profile small{display:block}.profile b{font-size:11px}.profile small{font-size:9px;color:#00ef9a}
@@ -562,30 +562,91 @@ $('bell').onclick=async()=>{
 $('mBell')?.addEventListener('click',()=>$('bell').click());
 
 let deferred=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferred=e;$('install').classList.add('show');
-});
-async function install(){
-  if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
-    showToast('LUMORA is already installed.');return;
-  }
-  if(deferred){
-    deferred.prompt();
-    try{await deferred.userChoice;}catch(e){}
-    deferred=null;return;
-  }
-  showToast('Install is available when opened from HTTPS or localhost.');
+let installWaiters=[];
+
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         window.matchMedia('(display-mode: fullscreen)').matches ||
+         window.navigator.standalone === true;
 }
-$('install').onclick=install;$('install2').onclick=install;
+
+function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent);}
+function isAndroid(){return /android/i.test(navigator.userAgent);}
+
+function setInstallVisible(){
+  const b=$('install');
+  if(b && !isStandalone()) b.classList.add('show');
+}
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferred=e;
+  setInstallVisible();
+  installWaiters.splice(0).forEach(fn=>fn());
+});
+
+function installGuide(){
+  if(isIOS()){
+    showToast('iPhone/iPad: Share → Add to Home Screen → Add.');
+    return;
+  }
+  showToast('Tap the browser menu ⋮ → Install LUMORA App.');
+}
+
+async function install(){
+  if(isStandalone()){
+    showToast('LUMORA is already installed.');
+    return;
+  }
+
+  // Chrome/Edge/Android: use the native one-tap install prompt.
+  if(deferred){
+    try{
+      deferred.prompt();
+      const choice=await deferred.userChoice;
+      if(choice && choice.outcome==='accepted') showToast('LUMORA installed successfully.');
+    }catch(e){
+      showToast('Install prompt could not be opened.');
+    }
+    deferred=null;
+    return;
+  }
+
+  // The browser may fire beforeinstallprompt a little after page load.
+  const gotPrompt=await new Promise(resolve=>{
+    let done=false;
+    const finish=()=>{if(done)return;done=true;clearTimeout(t);resolve(true)};
+    const t=setTimeout(()=>{if(done)return;done=true;resolve(false)},1200);
+    installWaiters.push(finish);
+  });
+
+  if(gotPrompt && deferred){
+    return install();
+  }
+
+  // iOS intentionally does not expose beforeinstallprompt.
+  // Other browsers can still install from their built-in install menu.
+  installGuide();
+}
+
+// Keep the install controls visible on supported browsers instead of waiting
+// for the prompt event just to show the button.
+setInstallVisible();
+$('install').onclick=install;
+$('install2').onclick=install;
+
 window.addEventListener('appinstalled',()=>{
   $('appReady').innerHTML='✓ <b>App Ready</b><small>Installed</small>';
+  $('install').classList.remove('show');
   $('install').style.display='none';
   showToast('LUMORA installed successfully.');
 });
-if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
+
+if(isStandalone()){
   $('appReady').innerHTML='✓ <b>App Ready</b><small>Installed</small>';
+  $('install').style.display='none';
 }
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=15').catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=16').catch(()=>{});
 
 // Functional navigation panels
 function pageHTML(view){

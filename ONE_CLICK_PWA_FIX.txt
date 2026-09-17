@@ -1,0 +1,8 @@
+LUMORA V16 — ONE-CLICK PWA INSTALL
+
+- Native beforeinstallprompt is used on supported Chrome/Edge browsers.
+- Install buttons are visible without waiting for the browser event.
+- When the native prompt is available, one click opens the browser's install confirmation.
+- iOS Safari does not expose a native one-click install API; it uses Share > Add to Home Screen.
+- PWA metadata and service-worker version were refreshed.
+- Live MT5/API logic is unchanged.
