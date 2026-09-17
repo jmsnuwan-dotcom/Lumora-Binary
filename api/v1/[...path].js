@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const VERSION = 'LUMORA_V12_NO_TRADE_HISTORY';
+const VERSION = 'LUMORA_V16_MARKET_EVENT_FIXED';
 let pool;
 let schemaPromise;
 
@@ -296,6 +296,26 @@ async function handle(req, res) {
           event: 'signal_wait',
           received_at: now
         });
+      }
+
+      // The MT5 bridge sends market packets to the configured /signals
+      // endpoint. Accept that event here as well as /api/v1/market.
+      if (event === 'market') {
+        const marketData = { ...data };
+        const bid = number(marketData.bid);
+        const ask = number(marketData.ask);
+        if (bid > 0 && ask > 0) {
+          marketData.spread = ask - bid;
+          const point = number(marketData.point);
+          if (point > 0) marketData.spread_points = (ask - bid) / point;
+        }
+        await db.query(`
+          INSERT INTO lumora_market(id, packet, received_at, updated_at)
+          VALUES(1,$1::jsonb,$2,NOW())
+          ON CONFLICT(id) DO UPDATE SET packet=EXCLUDED.packet, received_at=EXCLUDED.received_at, updated_at=NOW()
+        `, [JSON.stringify(marketData), now]);
+        await settleExpired(db, now);
+        return send(res, 200, { ok: true, event: 'market', received_at: now });
       }
 
       if (event === 'signal') {
