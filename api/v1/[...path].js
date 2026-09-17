@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const VERSION = 'LUMORA_V10_VERCEL_POSTGRES';
+const VERSION = 'LUMORA_V12_NO_TRADE_HISTORY';
 let pool;
 let schemaPromise;
 
@@ -19,15 +19,11 @@ function getPool() {
 }
 
 async function createSchemaSafely(db) {
-  // Vercel can run multiple serverless instances at the same time.
-  // An in-process promise is not enough because each instance has its own memory.
-  // PostgreSQL advisory transaction locking prevents concurrent DDL races.
+  // Multiple Vercel instances can initialize simultaneously. A PostgreSQL
+  // transaction advisory lock prevents concurrent CREATE TABLE/INDEX races.
   const client = await db.connect();
-
   try {
     await client.query('BEGIN');
-
-    // Transaction-scoped lock: it is released automatically on COMMIT/ROLLBACK.
     await client.query('SELECT pg_advisory_xact_lock($1)', [83920101]);
 
     await client.query(`
@@ -45,13 +41,10 @@ async function createSchemaSafely(db) {
         result_received_at BIGINT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
-
       CREATE INDEX IF NOT EXISTS lumora_signals_expiry_idx
         ON lumora_signals(expiry_epoch);
-
       CREATE INDEX IF NOT EXISTS lumora_signals_created_idx
         ON lumora_signals(created_at DESC);
-
       CREATE TABLE IF NOT EXISTS lumora_market (
         id INTEGER PRIMARY KEY,
         packet JSONB NOT NULL,
@@ -62,9 +55,7 @@ async function createSchemaSafely(db) {
 
     await client.query('COMMIT');
   } catch (e) {
-    try {
-      await client.query('ROLLBACK');
-    } catch (_) {}
+    try { await client.query('ROLLBACK'); } catch (_) {}
     throw e;
   } finally {
     client.release();
@@ -74,12 +65,10 @@ async function createSchemaSafely(db) {
 async function ensureSchema(db) {
   if (!schemaPromise) {
     schemaPromise = createSchemaSafely(db).catch((e) => {
-      // Do not permanently cache a failed initialization.
       schemaPromise = null;
       throw e;
     });
   }
-
   await schemaPromise;
 }
 
@@ -197,31 +186,33 @@ async function settleExpired(db, now) {
 
 async function state(db) {
   const now = Math.floor(Date.now() / 1000);
+
+  // Keep internal records for 30-second settlement, but never expose
+  // trade/signal history to the dashboard.
   await settleExpired(db, now);
+
   const market = await getMarket(db);
-  const rows = await db.query(`SELECT * FROM lumora_signals ORDER BY id DESC LIMIT 300`);
-  const history = [];
-  for (const row of rows.rows.reverse()) {
-    history.push(packetForSignal(row));
-    const rp = packetForResult(row);
-    if (rp) history.push(rp);
-  }
-  history.sort((a, b) => number(a.received_at) - number(b.received_at));
-  const trimmed = history.slice(-300);
 
   const activeQ = await db.query(`
     SELECT * FROM lumora_signals
     WHERE result IS NULL AND expiry_epoch > $1
     ORDER BY id DESC LIMIT 1
   `, [now]);
-  const active_signal = activeQ.rowCount ? packetForSignal(activeQ.rows[0]) : null;
+
+  const active_signal = activeQ.rowCount
+    ? packetForSignal(activeQ.rows[0])
+    : null;
 
   const target = Math.floor(now / 1800 + 1) * 1800;
+
   return {
-    history: trimmed,
+    history: [],
     market,
     active_signal,
-    news: { target_epoch: target, label: 'USD • next scheduled window' },
+    news: {
+      target_epoch: target,
+      label: 'USD • next scheduled window'
+    },
     server_epoch: now,
     version: VERSION
   };
@@ -231,16 +222,29 @@ async function handle(req, res) {
   cors(res);
   if (req.method === 'OPTIONS') return res.status(204).end();
 
-  const requestUrl = new URL(req.url || '/', 'https://lumora.local');
-  const route = requestUrl.pathname;
+  // Use the real HTTP pathname for reliable Vercel catch-all routing.
+  let route = '/';
+  try {
+    const requestUrl = new URL(req.url || '/', 'https://lumora.local');
+    route = requestUrl.pathname || '/';
+  } catch (_) {
+    const pathParts = req.query?.path;
+    const path = Array.isArray(pathParts) ? pathParts.join('/') : String(pathParts || '');
+    route = '/' + path.replace(/^\/+/, '');
+  }
+  if (route.length > 1) route = route.replace(/\/+$/, '');
+
   const db = getPool();
 
   if (route === '/health') {
     if (!db) return send(res, 503, { ok: false, error: 'DATABASE_URL is not configured', version: VERSION });
     try {
       await ensureSchema(db);
-      const r = await db.query('SELECT COUNT(*)::int AS count FROM lumora_signals');
-      return send(res, 200, { ok: true, history: r.rows[0].count, version: VERSION });
+      return send(res, 200, {
+        ok: true,
+        history: [],
+        version: VERSION
+      });
     } catch (e) {
       return send(res, 503, { ok: false, error: 'Database unavailable', version: VERSION });
     }
@@ -251,25 +255,50 @@ async function handle(req, res) {
   try {
     await ensureSchema(db);
 
-    if (route === '/api/v1/state' || route === '/v1/state' || route === '/state') {
+    if (route === '/api/v1/state' || route === '/v1/state') {
       return send(res, 200, await state(db));
     }
 
-    if (route === '/api/v1/signals' || route === '/v1/signals' || route === '/signals') {
+    if (route === '/api/v1/signals' || route === '/v1/signals') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
-      const event = input.event || 'signal';
-      const data = { ...(input.data || {}) };
+
+      // Accept the normal event field plus common aliases/variants.
+      const rawEvent =
+        input.event ??
+        input.eventType ??
+        input.type ??
+        (input.data && typeof input.data === 'object'
+          ? (input.data.event ?? input.data.eventType)
+          : undefined) ??
+        'signal';
+
+      let event = String(rawEvent).trim().toLowerCase();
+      event = event.replace(/[\s-]+/g, '_');
+
+      if (event === 'wait' || event === 'signalwait') event = 'signal_wait';
+      if (event === 'trade_signal' || event === 'tradesignal') event = 'signal';
+      if (event === 'result' || event === 'signalresult') event = 'signal_result';
+
+      const data =
+        input.data && typeof input.data === 'object' && !Array.isArray(input.data)
+          ? { ...input.data }
+          : { ...input };
+
+      delete data.event;
+      delete data.eventType;
+
       const now = Math.floor(Date.now() / 1000);
 
       if (event === 'signal_wait') {
         return send(res, 200, {
-            ok: true,
-            event: 'signal_wait'
+          ok: true,
+          event: 'signal_wait',
+          received_at: now
         });
-    }
-      
-    if (event === 'signal') {
+      }
+
+      if (event === 'signal') {
         const expirySeconds = Math.max(1, Math.floor(number(data.expiry_seconds, 30)));
         data.signal_epoch = now;
         data.expiry_epoch = now + expirySeconds;
@@ -300,10 +329,14 @@ async function handle(req, res) {
         return send(res, 200, { ok: true, event, signal_id: sid });
       }
 
-      return send(res, 400, { ok: false, error: 'unsupported event' });
+      return send(res, 400, {
+        ok: false,
+        error: 'unsupported event',
+        received_event: event
+      });
     }
 
-    if (route === '/api/v1/market' || route === '/v1/market' || route === '/market') {
+    if (route === '/api/v1/market' || route === '/v1/market') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
       const data = { ...(input.data || {}) };
