@@ -1,9 +1,10 @@
-LUMORA V14 MOBILE FIX
+LUMORA V16 — MOBILE + LIVE API FIX
 
-- Final responsive mobile layout.
-- Removed desktop min-width / horizontal overflow on phones.
-- Signal, stats, entry, chart, analysis and performance cards resize to the device width.
-- Canvas chart scales correctly on mobile.
-- Service worker cache bumped and HTML is network-first, so normal refresh gets new deployments.
-- MT5/API logic unchanged.
+- Mobile responsive layout retained.
+- LUMORA logo centered on mobile.
+- Chart sizing/refresh fixes retained.
+- Fixed MT5 market event: the /api/v1/signals endpoint now accepts event="market" and updates live market data.
+- /api/v1/market remains supported.
+- signal_wait remains supported.
+- MT5 signal execution/strategy logic unchanged.
 - Trade history remains disabled.

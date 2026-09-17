@@ -125,7 +125,36 @@ footer{width:100%;height:auto;min-height:52px;padding:9px 10px;display:flex;flex
 .header-logo{width:290px;height:82px;object-fit:cover;object-position:center;display:block;filter:drop-shadow(0 0 12px rgba(0,145,255,.28));border-radius:8px}.notify-btn{height:58px;border:1px solid #19ef82;border-radius:10px;background:linear-gradient(135deg,#052e28,#063d34);color:#bfffe7;padding:8px 14px;cursor:pointer;box-shadow:0 0 16px rgba(0,239,154,.18)}.notify-btn b{display:block;font-size:11px;color:#00f19a}.app-ready{height:58px;min-width:120px;border:1px solid #16a86c;border-radius:10px;background:#031c19;display:flex;align-items:center;gap:6px;padding:7px 11px;color:#00ef9a}.app-ready b,.app-ready small{display:block}.app-ready small{font-size:8px;color:#b1c9c3}.app-ready{font-size:22px}
 @media(max-width:900px){body{min-width:0;font-size:13px}.topbar{height:auto;min-height:92px;padding:8px 10px;flex-wrap:wrap;gap:8px}.logo{width:210px}.header-logo{width:210px;height:64px}.sub{position:absolute;left:12px;top:69px;margin:0;font-size:6px}.quote{display:none}.tools{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.sessions div{width:58px}.news{min-width:135px}.install{min-width:105px}.notify-btn{min-width:145px}.app-ready{min-width:110px}.layout{display:block}.side{width:100%;min-height:0;border-right:0;border-bottom:1px solid #143565;padding:6px;position:sticky;top:0;z-index:4}.side nav{display:flex;overflow-x:auto;gap:4px}.side a{height:40px;min-width:max-content;padding:0 10px;font-size:11px;gap:6px}.side a span{font-size:16px;width:auto}.promo{display:none}main{padding:8px}.ticker{grid-template-columns:repeat(2,1fr)}.ticker>div{height:65px;padding:9px}.gold{grid-column:1/-1}.gold strong{font-size:23px}.gold em{margin:38px 0 0 115px;font-size:9px}.grid{grid-template-columns:1fr;gap:8px}.notifications{grid-column:auto}.signalbox{font-size:39px}.chart{height:360px}.perfrow,.bottom{grid-template-columns:1fr}.perfgrid{grid-template-columns:repeat(4,1fr)}.riskgrid{grid-template-columns:repeat(3,1fr)}.mobile{min-height:180px}footer{height:auto;min-height:55px;flex-wrap:wrap;padding:9px 12px;gap:8px}footer i{margin:0!important}.table{min-width:680px}}
 @media(max-width:560px){.top-tools{display:none}.topbar{justify-content:center}.logo{width:230px}.header-logo{width:230px}.ticker{grid-template-columns:1fr 1fr}.ticker .gold{grid-column:1/-1}.signal-card h2{font-size:17px}.stats{grid-template-columns:1fr 1fr}.stats .timer{grid-column:1/-1}.entry{grid-template-columns:1fr 1fr}.analysis-row{font-size:10px}.perfgrid{grid-template-columns:1fr 1fr}.riskgrid{grid-template-columns:1fr 1fr 1fr}.bottom{gap:8px}.mobile{display:none}}
-</style></head><body><div class="bg"></div>
+</style><style id="lumora-final-mobile-v15">
+@media (max-width:900px){
+  html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
+  header{width:100%!important;display:grid!important;grid-template-columns:1fr!important;justify-items:center!important;padding:8px 8px 9px!important;overflow:hidden!important}
+  header .logo{width:100%!important;height:58px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+  header .header-logo{width:min(230px,72vw)!important;height:58px!important;object-fit:contain!important;object-position:center!important;margin:0 auto!important}
+  header .tools{width:100%!important;margin:0!important;justify-content:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important}
+  .mobile-nav{width:100%!important;display:flex!important}
+  main{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
+  .ticker,.grid,.perfrow,.bottom{width:100%!important;max-width:100%!important;min-width:0!important}
+  .ticker>div,.card,.signal,.chart,.analysis,.noti,.perf,.risk,.flow,.mobile{min-width:0!important;max-width:100%!important}
+  .chart{height:300px!important}
+  .chartbox{width:100%!important;height:235px!important;min-width:0!important;overflow:hidden!important}
+  .chartbox canvas{display:block!important;width:100%!important;height:100%!important;max-width:100%!important}
+}
+@media (max-width:560px){
+  header .header-logo{width:min(220px,76vw)!important;height:54px!important}
+  header .logo{height:54px!important}
+  .chart{height:275px!important}
+  .chartbox{height:215px!important}
+}
+@media (max-width:360px){
+  header .header-logo{width:205px!important}
+  main{padding-left:5px!important;padding-right:5px!important}
+  .ticker{gap:6px!important}
+  .chart{height:265px!important}
+  .chartbox{height:205px!important}
+}
+</style>
+</head><body><div class="bg"></div>
 <header><div class="logo"><img class="header-logo" src="lumora-header.png" alt="LUMORA"></div><div class="sub">BINARY TRADING&nbsp; | &nbsp;SMARTER TOGETHER</div><div class="quote">“Discipline Turns Signals<br>Into Freedom”</div><div class="tools"><div class="sessions"><div><b>SYD</b><strong>22:14</strong><em>Open</em></div><div><b>TKY</b><strong>00:14</strong><em>Open</em></div><div class="on"><b>LDN</b><strong>14:14</strong><em>Open</em></div><div><b>NY</b><strong>09:14</strong><em>Open</em></div></div><div class="news"><b>News Countdown</b><strong id="news">--:--</strong><small id="newsLabel">USD • next scheduled window</small></div><button id="install" class="install">📱 <b>Install App</b><small> Get Live Signals</small></button><button id="bell" class="notify-btn">🔔 <b>Enable Notifications</b></button><div id="appReady" class="app-ready">✓ <b>App Ready</b><small>Installed</small></div></div></header>
 <div class="layout"><aside class="side"><nav><a class="active nav" data-view="Dashboard"><span>⌂</span>Dashboard</a><a class="nav" data-view="Live Signals"><span>◉</span>Live Signals</a><a class="nav" data-view="Market"><span>▥</span>Market</a><a class="nav" data-view="Performance"><span>⌁</span>Performance</a><a class="nav" data-view="News & Calendar"><span>▣</span>News & Calendar</a><a class="nav" data-view="Settings"><span>⚙</span>Settings</a></nav><div class="promo"><div class="big">TRADE<br><b>GOLD</b><br>TRADE<br><strong>SMARTER</strong></div><div class="bars">▰<br>▰▰</div><b style="color:#12e0ff">◈ LUMORA</b><small>DISCIPLINE<br>BRINGS FREEDOM</small></div></aside>
 <div class="mobile-nav"><button>☰</button><b>LUMORA</b><button id="mBell">🔔</button></div><main>
@@ -150,7 +179,8 @@ const state={
   connected:false,
   lastSignal:null,
   serverOffsetMs:0,
-  news:{target_epoch:0,label:'USD • next scheduled window'}
+  news:{target_epoch:0,label:'USD • next scheduled window'},
+  loading:false
 };
 
 function esc(v){
@@ -350,25 +380,50 @@ function rebuildFromHistory(history,active){
 }
 
 async function loadState(){
+  // Keep polling reliable on mobile networks without allowing slow requests
+  // to pile up and freeze the visible dashboard.
+  if(state.loading)return;
+  state.loading=true;
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),4500);
   try{
-    const r=await fetch('/api/v1/state',{cache:'no-store'});
+    const r=await fetch('/api/v1/state?ts='+Date.now(),{
+      cache:'no-store',
+      headers:{'Cache-Control':'no-cache','Pragma':'no-cache'},
+      signal:controller.signal
+    });
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const d=await r.json();
     if(Number.isFinite(Number(d.server_epoch))) state.serverOffsetMs=Number(d.server_epoch)*1000-Date.now();
-    state.news=d.news||state.news;
+    if(d.news)state.news=d.news;
     state.market=d.market||{};
+    // Accept candles from either the top-level state or the market packet.
+    const liveCandles=Array.isArray(d.candles)?d.candles:(Array.isArray(state.market.candles)?state.market.candles:[]);
+    if(liveCandles.length){state.candles=liveCandles;window.mt5Candles=liveCandles;}
     rebuildFromHistory(d.history||[],d.active_signal||null);
-    if(state.market.bid)updateMarket(state.market);
-    else setConnection(false);
+    if(state.market && (state.market.bid!=null || state.market.ask!=null)){
+      updateMarket(state.market);
+    }else{
+      setConnection(false);
+    }
+    chart();
   }catch(e){
     setConnection(false);
-    showToast('MT5 server connection unavailable.');
+    // Do not replace the whole dashboard with an error; keep the last valid
+    // market/chart values visible and retry on the next poll.
+    console.warn('LUMORA state refresh failed:',e?.message||e);
+  }finally{
+    clearTimeout(timeout);
+    state.loading=false;
   }
 }
 
 function chart(){
   const c=$('cv');if(!c)return;
   const x=c.getContext('2d'),dpr=window.devicePixelRatio||1;
-  const rect=c.getBoundingClientRect(),w=Math.max(420,Math.floor(rect.width*dpr)),h=Math.max(250,Math.floor(rect.height*dpr));
+  const rect=c.getBoundingClientRect();
+  const w=Math.max(1,Math.floor(rect.width*dpr));
+  const h=Math.max(1,Math.floor(rect.height*dpr));
   if(c.width!==w||c.height!==h){c.width=w;c.height=h;}
   x.clearRect(0,0,w,h);
 
@@ -530,7 +585,7 @@ window.addEventListener('appinstalled',()=>{
 if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
   $('appReady').innerHTML='✓ <b>App Ready</b><small>Installed</small>';
 }
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=15').catch(()=>{});
 
 // Functional navigation panels
 function pageHTML(view){
