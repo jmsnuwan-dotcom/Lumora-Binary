@@ -1,0 +1,10 @@
+LUMORA V17 — CLEAN ONE-CLICK PWA
+
+- Removed the blue “Tap browser menu → Install” instruction popup.
+- Install button uses the native beforeinstallprompt dialog on supported Chrome/Edge/Android browsers.
+- Install button stays visible until the app is installed.
+- Clean mobile and desktop install UI.
+- Service worker cache bumped to V17.
+- Existing MT5/API logic unchanged.
+
+Platform note: iOS Safari does not expose the native web install prompt, so a webpage cannot force a one-click installation there.

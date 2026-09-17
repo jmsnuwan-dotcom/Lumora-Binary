@@ -117,6 +117,11 @@ main{width:100%;max-width:100%;padding:8px 8px 18px;overflow:hidden}
 footer{width:100%;height:auto;min-height:52px;padding:9px 10px;display:flex;flex-wrap:wrap;gap:6px;overflow:hidden}footer i{display:none!important}footer em{font-size:7px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.page-view{padding:10px;overflow:auto}.page-card{width:100%;max-width:none;margin:50px auto 0;padding:12px}
 }
 @media(max-width:420px){header{padding-left:7px;padding-right:7px}.header-logo{width:210px;height:54px}.tools{gap:5px}.sessions div{width:50px}.news{flex-basis:112px;min-width:112px}main{padding-left:6px;padding-right:6px}.ticker>div{height:61px;padding:7px}.gold strong{font-size:20px}.gold em{margin-left:82px;font-size:7px}.signalbox{height:60px;font-size:32px}.stats>div{height:62px;padding:6px}.stats strong{font-size:16px}.ring{width:42px;height:42px;min-width:42px}.chart{height:275px}.chartbox{height:215px}}
+
+/* V17 ONE-CLICK INSTALL CLEANUP */
+.install{white-space:nowrap;display:none!important}
+.install.show{display:block!important}
+@media(max-width:900px){.install{font-size:11px;padding:9px 10px}.install small{display:none}}
 </style><style>
 .mobile-nav{display:none}.page-view{display:none;position:fixed;inset:0;background:#020817f5;z-index:20;padding:30px}.page-card{max-width:900px;margin:70px auto;background:#04142d;border:1px solid #08bfff;border-radius:14px;padding:20px;box-shadow:0 0 40px #006dff55}.page-card #pageContent{margin-top:20px;line-height:1.8;color:#c9d9ee}.page-card button{background:none;border:1px solid #24578d;color:#fff;border-radius:7px;padding:5px 10px}.nav{cursor:pointer}
 @media(max-width:900px){body{min-width:0}.topbar{height:70px;padding:7px 12px}.brand .mark{width:48px;height:48px;border-radius:12px}.brand .word{font-size:27px;letter-spacing:-2px}.sub,.quote,.top-tools .sessions,.news,.profile{display:none}.top-tools{margin-left:auto}.install{padding:7px;font-size:10px}.layout{display:block}.side{display:none}.mobile-nav{display:flex;position:sticky;top:0;z-index:10;height:52px;background:#020b1cf2;border-bottom:1px solid #16488d;align-items:center;justify-content:space-between;padding:0 14px;color:#14ddff}.mobile-nav button{border:1px solid #16488d;background:#061a38;color:#fff;border-radius:7px;padding:7px 10px}.mobile-nav b{font-size:16px}main{padding:10px}.ticker{grid-template-columns:1fr 1fr;gap:7px}.ticker>div{height:65px;padding:9px}.gold{grid-column:1/-1}.gold strong{font-size:23px}.gold em{margin:39px 0 0 128px;font-size:9px}.grid{grid-template-columns:1fr;gap:9px}.chart{order:2}.analysis{order:3}.noti{order:4}.signal{order:1}.chartbox{height:305px}.perfrow{grid-template-columns:1fr;gap:9px}.perfgrid{grid-template-columns:repeat(4,1fr)}.bottom{grid-template-columns:1fr;gap:9px}.mobile{display:flex}.recent{overflow:auto}.entry{grid-template-columns:repeat(2,1fr)}.entry>div:nth-child(2){border-right:0}.notifications article{grid-template-columns:35px 20px 1fr}footer{height:auto;min-height:50px;padding:10px;flex-wrap:wrap}footer i{display:none}.trade-promo{display:none}.signalbox{font-size:40px}.ticker .session,.ticker .bridge{grid-column:span 1}.page-view{padding:12px}.page-card{margin:55px auto 0}.top-grid{display:contents}
@@ -155,7 +160,7 @@ footer{width:100%;height:auto;min-height:52px;padding:9px 10px;display:flex;flex
 }
 </style>
 </head><body><div class="bg"></div>
-<header><div class="logo"><img class="header-logo" src="lumora-header.png" alt="LUMORA"></div><div class="sub">BINARY TRADING&nbsp; | &nbsp;SMARTER TOGETHER</div><div class="quote">“Discipline Turns Signals<br>Into Freedom”</div><div class="tools"><div class="sessions"><div><b>SYD</b><strong>22:14</strong><em>Open</em></div><div><b>TKY</b><strong>00:14</strong><em>Open</em></div><div class="on"><b>LDN</b><strong>14:14</strong><em>Open</em></div><div><b>NY</b><strong>09:14</strong><em>Open</em></div></div><div class="news"><b>News Countdown</b><strong id="news">--:--</strong><small id="newsLabel">USD • next scheduled window</small></div><button id="install" class="install">📱 <b>Install App</b><small> Get Live Signals</small></button><button id="bell" class="notify-btn">🔔 <b>Enable Notifications</b></button><div id="appReady" class="app-ready">✓ <b>App Ready</b><small>Installed</small></div></div></header>
+<header><div class="logo"><img class="header-logo" src="lumora-header.png" alt="LUMORA"></div><div class="sub">BINARY TRADING&nbsp; | &nbsp;SMARTER TOGETHER</div><div class="quote">“Discipline Turns Signals<br>Into Freedom”</div><div class="tools"><div class="sessions"><div><b>SYD</b><strong>22:14</strong><em>Open</em></div><div><b>TKY</b><strong>00:14</strong><em>Open</em></div><div class="on"><b>LDN</b><strong>14:14</strong><em>Open</em></div><div><b>NY</b><strong>09:14</strong><em>Open</em></div></div><div class="news"><b>News Countdown</b><strong id="news">--:--</strong><small id="newsLabel">USD • next scheduled window</small></div><button id="install" class="install">📱 <b>Install LUMORA App</b></button><button id="bell" class="notify-btn">🔔 <b>Enable Notifications</b></button><div id="appReady" class="app-ready">✓ <b>App Ready</b><small>Installed</small></div></div></header>
 <div class="layout"><aside class="side"><nav><a class="active nav" data-view="Dashboard"><span>⌂</span>Dashboard</a><a class="nav" data-view="Live Signals"><span>◉</span>Live Signals</a><a class="nav" data-view="Market"><span>▥</span>Market</a><a class="nav" data-view="Performance"><span>⌁</span>Performance</a><a class="nav" data-view="News & Calendar"><span>▣</span>News & Calendar</a><a class="nav" data-view="Settings"><span>⚙</span>Settings</a></nav><div class="promo"><div class="big">TRADE<br><b>GOLD</b><br>TRADE<br><strong>SMARTER</strong></div><div class="bars">▰<br>▰▰</div><b style="color:#12e0ff">◈ LUMORA</b><small>DISCIPLINE<br>BRINGS FREEDOM</small></div></aside>
 <div class="mobile-nav"><button>☰</button><b>LUMORA</b><button id="mBell">🔔</button></div><main>
 <section class="ticker"><div class="gold"><span style="font-size:25px;color:#ffd63b">◆</span><div><b>XAU/USD</b><small>GOLD</small></div><strong id="price">2641.39</strong><em id="chg">+2.36 (+0.09%)</em></div><div><small>Spread</small><b id="spread">--</b></div><div><small>ATR (M1)</small><b id="atr">2.15</b></div><div><small>Market Regime</small><b class="green">TRENDING</b></div><div class="session"><small>Session</small><b><i></i>London</b><em>Active</em></div><div class="bridge"><small>MT5 Bridge</small><b><i></i>CONNECTED</b></div></section>
@@ -570,28 +575,21 @@ function isStandalone(){
          window.navigator.standalone === true;
 }
 
-function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent);}
-function isAndroid(){return /android/i.test(navigator.userAgent);}
-
 function setInstallVisible(){
   const b=$('install');
-  if(b && !isStandalone()) b.classList.add('show');
+  if(b && !isStandalone()){
+    b.classList.add('show');
+    b.style.display='block';
+  }
 }
 
 window.addEventListener('beforeinstallprompt',e=>{
+  // Keep the native browser install prompt available for a real one-click install.
   e.preventDefault();
   deferred=e;
   setInstallVisible();
   installWaiters.splice(0).forEach(fn=>fn());
 });
-
-function installGuide(){
-  if(isIOS()){
-    showToast('iPhone/iPad: Share → Add to Home Screen → Add.');
-    return;
-  }
-  showToast('Tap the browser menu ⋮ → Install LUMORA App.');
-}
 
 async function install(){
   if(isStandalone()){
@@ -599,38 +597,37 @@ async function install(){
     return;
   }
 
-  // Chrome/Edge/Android: use the native one-tap install prompt.
+  // Chrome / Edge / Android: open the native PWA install dialog.
   if(deferred){
     try{
       deferred.prompt();
       const choice=await deferred.userChoice;
       if(choice && choice.outcome==='accepted') showToast('LUMORA installed successfully.');
     }catch(e){
-      showToast('Install prompt could not be opened.');
+      showToast('Install could not be started.');
     }
     deferred=null;
     return;
   }
 
-  // The browser may fire beforeinstallprompt a little after page load.
-  const gotPrompt=await new Promise(resolve=>{
+  // Give the browser a short moment to deliver beforeinstallprompt.
+  await new Promise(resolve=>{
     let done=false;
-    const finish=()=>{if(done)return;done=true;clearTimeout(t);resolve(true)};
-    const t=setTimeout(()=>{if(done)return;done=true;resolve(false)},1200);
+    const finish=()=>{if(done)return;done=true;clearTimeout(t);resolve()};
+    const t=setTimeout(finish,1800);
     installWaiters.push(finish);
   });
 
-  if(gotPrompt && deferred){
+  if(deferred){
     return install();
   }
 
-  // iOS intentionally does not expose beforeinstallprompt.
-  // Other browsers can still install from their built-in install menu.
-  installGuide();
+  // No fake browser-menu popup: browsers that do not expose the native
+  // install API cannot be installed programmatically by a webpage.
+  // Keep the page clean and do not show the old blue instruction banner.
 }
 
-// Keep the install controls visible on supported browsers instead of waiting
-// for the prompt event just to show the button.
+// Always show the install button on non-installed browsers.
 setInstallVisible();
 $('install').onclick=install;
 $('install2').onclick=install;
@@ -646,7 +643,7 @@ if(isStandalone()){
   $('appReady').innerHTML='✓ <b>App Ready</b><small>Installed</small>';
   $('install').style.display='none';
 }
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=16').catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=17').catch(()=>{});
 
 // Functional navigation panels
 function pageHTML(view){
