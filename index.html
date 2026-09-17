@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="theme-color" content="#020817"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>LUMORA — 30 Second Signals</title>
+<!doctype html><html><head>
+<meta name="lumora-version" content="14-live-chart"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="theme-color" content="#020817"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>LUMORA — 30 Second Signals</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#020817;color:#eef7ff;font-family:Arial,Segoe UI,sans-serif;min-width:1180px;font-size:14px}.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 42% 5%,#063a72 0,transparent 27%),radial-gradient(circle at 90% 80%,#26005d 0,transparent 27%),linear-gradient(120deg,#020817,#020512 60%,#080018)}
 header{height:108px;border-bottom:1px solid #143c75;display:flex;align-items:center;padding:10px 25px;gap:22px;background:#02091af2}.logo{display:flex;align-items:center;gap:8px}.mark{width:72px;height:72px;border:3px solid #12caff;border-radius:17px;display:grid;place-items:center;font-size:35px;box-shadow:0 0 22px #075fff,0 0 25px #b11cff}.word{font-size:49px;font-weight:900;letter-spacing:-4px;background:linear-gradient(90deg,#fff,#e9f4ff,#09bfff,#b93cff);-webkit-background-clip:text;color:transparent}.sub{font-size:8px;letter-spacing:.2em;color:#a4bbd9;margin-left:-270px;margin-top:78px}.quote{font-style:italic;color:#cbdcff;font-size:16px;line-height:1.4;margin-left:25px}.tools{margin-left:auto;display:flex;gap:9px;align-items:center}.sessions{display:flex;border:1px solid #174582;border-radius:8px;overflow:hidden}.sessions div{width:72px;text-align:center;padding:7px;border-right:1px solid #173b70}.sessions div:last-child{border:0}.sessions b,.sessions strong,.sessions em{display:block}.sessions b{font-size:10px;color:#9eb5d3}.sessions strong{font-size:14px}.sessions em{font-size:10px;color:#00f19a;font-style:normal}.sessions .on{box-shadow:inset 0 -2px #12dfff}.news{border:1px solid #174582;border-radius:8px;padding:7px 12px;min-width:155px}.news b,.news strong,.news small{display:block}.news b{font-size:10px}.news strong{font-size:18px;color:#ff6170}.news small{font-size:8px;color:#9db0ca}.install{display:none;border:1px solid #00caff;border-radius:10px;background:linear-gradient(135deg,#043e67,#5a13a8);color:#fff;padding:10px 15px;box-shadow:0 0 22px #075cff55;cursor:pointer}.install.show{display:block}.bell{background:none;border:0;color:#ff4f5d;font-size:23px;position:relative}.bell i{position:absolute;background:#ff3c4e;color:#fff;border-radius:50%;font-size:10px;padding:4px 7px;top:-6px;right:-5px}.profile{display:flex;gap:8px;align-items:center}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#506887}.profile b,.profile small{display:block}.profile b{font-size:11px}.profile small{font-size:9px;color:#00ef9a}
@@ -118,11 +119,18 @@ footer{height:47px;border-top:1px solid #12325e;padding:0 25px;display:flex;alig
 <script>
 const $=id=>document.getElementById(id);
 
+// Ask the browser to check for the newest Service Worker on every page load.
+// This helps normal refresh on mobile/PWA pick up the latest deployment.
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{}));
+}
+
 const state={
   history:[],
   market:{},
   active:null,
   candles:[],
+  livePrices:[],
   connected:false,
   lastSignal:null,
   serverOffsetMs:0,
@@ -255,6 +263,17 @@ function updateMarket(d){
   if(Number.isFinite(Number(d.atr))) $('atr').textContent=num(d.atr);
   if(Number.isFinite(Number(d.rsi))) updatePageMarket(d);
   if(Array.isArray(d.candles)&&d.candles.length){state.candles=d.candles;window.mt5Candles=state.candles;}
+  // Keep a short real-time quote trail so the chart visibly moves between
+  // M1 candle updates. This is display-only and does not affect signals.
+  const bid=Number(d.bid);
+  if(Number.isFinite(bid)&&bid>0){
+    const t=Number(d.tick_time_msc||Date.now());
+    const last=state.livePrices[state.livePrices.length-1];
+    if(!last || t>=last.time){
+      state.livePrices.push({time:t,close:bid});
+      if(state.livePrices.length>120) state.livePrices.splice(0,state.livePrices.length-120);
+    }
+  }
   setConnection(true);
   updateAnalysis(d);
   chart();
@@ -354,8 +373,22 @@ function chart(){
   for(let xx=30*dpr;xx<w;xx+=72*dpr){x.beginPath();x.moveTo(xx,0);x.lineTo(xx,h);x.stroke();}
 
   let arr=Array.isArray(state.candles)?state.candles:[];
-  if(arr.length>36) arr=arr.slice(-36); // fewer points = larger, clearer movement
-  const closes=arr.map(v=>Number(v.close)).filter(Number.isFinite);
+  if(arr.length>36) arr=arr.slice(-36);
+  let closes=arr.map(v=>Number(v.close)).filter(Number.isFinite);
+
+  // If candle data is not available yet, use the live quote trail. When
+  // candles are available, append the newest quotes so the line still moves
+  // smoothly every second without changing the underlying M1 candle data.
+  const live=Array.isArray(state.livePrices)?state.livePrices:[];
+  if(closes.length<2 && live.length>=2){
+    closes=live.slice(-60).map(v=>Number(v.close)).filter(Number.isFinite);
+  }else if(closes.length>=2 && live.length){
+    const lastCandle=closes[closes.length-1];
+    const liveTail=live.slice(-8).map(v=>Number(v.close)).filter(Number.isFinite);
+    if(liveTail.length && Math.abs(liveTail[liveTail.length-1]-lastCandle)<20){
+      closes=closes.concat(liveTail);
+    }
+  }
   if(closes.length<2){
     x.fillStyle='#6e87a6';x.font=`${13*dpr}px Arial`;x.textAlign='center';
     x.fillText('Waiting for live MT5 price data…',w/2,h/2);return;
