@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const VERSION = 'LUMORA_V14_LIVE_CHART_NO_TRADE_HISTORY';
+const VERSION = 'LUMORA_V12_NO_TRADE_HISTORY';
 let pool;
 let schemaPromise;
 
@@ -259,7 +259,7 @@ async function handle(req, res) {
       return send(res, 200, await state(db));
     }
 
-    if (route === '/api/v1/signals' || route === '/v1/signals' || route === '/signals') {
+    if (route === '/api/v1/signals' || route === '/v1/signals') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
 
@@ -296,25 +296,6 @@ async function handle(req, res) {
           event: 'signal_wait',
           received_at: now
         });
-      }
-
-      // The MT5 bridge posts BOTH signal and market packets to the configured
-      // /api/v1/signals URL. Accept market packets here as well so the live
-      // chart and market cards are updated from the same endpoint.
-      if (event === 'market') {
-        const bid = number(data.bid), ask = number(data.ask);
-        if (bid > 0 && ask > 0) {
-          data.spread = ask - bid;
-          const point = number(data.point);
-          if (point > 0) data.spread_points = (ask - bid) / point;
-        }
-        await db.query(`
-          INSERT INTO lumora_market(id, packet, received_at, updated_at)
-          VALUES(1,$1::jsonb,$2,NOW())
-          ON CONFLICT(id) DO UPDATE SET packet=EXCLUDED.packet, received_at=EXCLUDED.received_at, updated_at=NOW()
-        `, [JSON.stringify(data), now]);
-        await settleExpired(db, now);
-        return send(res, 200, { ok: true, event: 'market' });
       }
 
       if (event === 'signal') {
@@ -355,7 +336,7 @@ async function handle(req, res) {
       });
     }
 
-    if (route === '/api/v1/market' || route === '/v1/market' || route === '/market') {
+    if (route === '/api/v1/market' || route === '/v1/market') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
       const data = { ...(input.data || {}) };
