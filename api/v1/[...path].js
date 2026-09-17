@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const VERSION = 'LUMORA_V13_MARKET_SIGNAL_FIXED_NO_TRADE_HISTORY';
+const VERSION = 'LUMORA_V14_MARKET_EVENT_SIGNAL_ROUTE_FIXED_NO_TRADE_HISTORY';
 let pool;
 let schemaPromise;
 
@@ -328,6 +328,24 @@ async function handle(req, res) {
           ON CONFLICT(signal_id) DO NOTHING
         `, [data.signal_id, packet.source, packet.symbol, packet.timeframe, JSON.stringify(packet), now, data.signal_epoch, data.expiry_epoch]);
         return send(res, 200, { ok: true, event, signal_id: data.signal_id });
+      }
+
+      // MT5 currently posts market packets to /api/v1/signals with event=market.
+      // Accept that format here as well as the dedicated /api/v1/market route.
+      if (event === 'market') {
+        const bid = number(data.bid), ask = number(data.ask);
+        if (bid > 0 && ask > 0) {
+          data.spread = ask - bid;
+          const point = number(data.point);
+          if (point > 0) data.spread_points = (ask - bid) / point;
+        }
+        await db.query(`
+          INSERT INTO lumora_market(id, packet, received_at, updated_at)
+          VALUES(1,$1::jsonb,$2,NOW())
+          ON CONFLICT(id) DO UPDATE SET packet=EXCLUDED.packet, received_at=EXCLUDED.received_at, updated_at=NOW()
+        `, [JSON.stringify(data), now]);
+        await settleExpired(db, now);
+        return send(res, 200, { ok: true, event: 'market' });
       }
 
       if (event === 'signal_result') {
