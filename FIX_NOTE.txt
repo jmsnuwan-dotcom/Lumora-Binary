@@ -1,12 +1,9 @@
-LUMORA V12 - NO TRADE HISTORY
+LUMORA V14 MOBILE FIX
 
-Trade/Signal History has been removed from the client dashboard and API state output.
-
-- Signal history UI/navigation removed.
-- /api/v1/state returns history: [].
-- /health does not expose a history count.
-- Internal PostgreSQL signal records are preserved for expiry/result settlement.
-- No database records are deleted by this package.
-- Vercel route parsing uses req.url pathname.
-- API accepts event/eventType/type and common event variants.
-- Version: LUMORA_V12_NO_TRADE_HISTORY
+- Final responsive mobile layout.
+- Removed desktop min-width / horizontal overflow on phones.
+- Signal, stats, entry, chart, analysis and performance cards resize to the device width.
+- Canvas chart scales correctly on mobile.
+- Service worker cache bumped and HTML is network-first, so normal refresh gets new deployments.
+- MT5/API logic unchanged.
+- Trade history remains disabled.

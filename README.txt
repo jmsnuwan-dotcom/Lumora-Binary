@@ -1,3 +1,5 @@
+LUMORA V14 — FINAL MOBILE RESPONSIVE FIX
+
 LUMORA 30 SECOND SIGNAL ENGINE - V10
 
 This package contains the LUMORA local dashboard, Python server, PWA assets and MT5 bridge EA.
