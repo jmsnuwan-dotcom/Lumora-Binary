@@ -158,9 +158,20 @@ footer{width:100%;height:auto;min-height:52px;padding:9px 10px;display:flex;flex
   .chart{height:265px!important}
   .chartbox{height:205px!important}
 }
+.login-screen{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 42% 5%,#063a72 0,transparent 27%),radial-gradient(circle at 90% 80%,#26005d 0,transparent 27%),linear-gradient(120deg,#020817,#020512 60%,#080018)}
+.login-screen.hidden{display:none}
+.login-card{width:340px;max-width:92vw;border:1px solid #16488d;border-radius:14px;background:linear-gradient(145deg,#03172ff0,#020a1ff2);box-shadow:0 8px 40px #0009;padding:28px 26px}
+.login-card h1{margin:0 0 4px;font-size:22px;background:linear-gradient(90deg,#fff,#e9f4ff,#09bfff,#b93cff);-webkit-background-clip:text;color:transparent}
+.login-card p{margin:0 0 20px;color:#9eb5d3;font-size:12px}
+.login-card label{display:block;font-size:10px;color:#9eb5d3;margin:14px 0 6px;letter-spacing:.05em}
+.login-card input{width:100%;background:#061a38;border:1px solid #173e75;border-radius:8px;padding:11px 12px;color:#eef7ff;font-size:14px}
+.login-card input:focus{outline:none;border-color:#12dcff;box-shadow:0 0 0 2px #12dcff33}
+.login-card button{width:100%;margin-top:20px;border:1px solid #00caff;border-radius:8px;background:linear-gradient(135deg,#043e67,#5a13a8);color:#fff;padding:12px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 0 22px #075cff55}
+.login-card button:disabled{opacity:.6;cursor:default}
+.login-error{margin-top:14px;font-size:11px;color:#ff6170;min-height:14px}
 </style>
-</head><body><div class="bg"></div>
-<header><div class="logo"><img class="header-logo" src="lumora-header.png" alt="LUMORA"></div><div class="sub">BINARY TRADING&nbsp; | &nbsp;SMARTER TOGETHER</div><div class="quote">“Discipline Turns Signals<br>Into Freedom”</div><div class="tools"><div class="sessions"><div><b>SYD</b><strong>22:14</strong><em>Open</em></div><div><b>TKY</b><strong>00:14</strong><em>Open</em></div><div class="on"><b>LDN</b><strong>14:14</strong><em>Open</em></div><div><b>NY</b><strong>09:14</strong><em>Open</em></div></div><div class="news"><b>News Countdown</b><strong id="news">--:--</strong><small id="newsLabel">USD • next scheduled window</small></div><button id="install" class="install">📱 <b>Install LUMORA App</b></button><button id="bell" class="notify-btn">🔔 <b>Enable Notifications</b></button><div id="appReady" class="app-ready">✓ <b>App Ready</b><small>Installed</small></div></div></header>
+</head><body><div id="loginScreen" class="login-screen"><form id="loginForm" class="login-card"><h1>LUMORA</h1><p>Sign in to view live 30-second signals.</p><label for="loginUser">Username</label><input id="loginUser" autocomplete="username" required><label for="loginPass">Password</label><input id="loginPass" type="password" autocomplete="current-password" required><button type="submit" id="loginBtn">Sign In</button><div id="loginError" class="login-error"></div></form></div><div class="bg"></div>
+<header><div class="logo"><img class="header-logo" src="lumora-header.png" alt="LUMORA"></div><div class="sub">BINARY TRADING&nbsp; | &nbsp;SMARTER TOGETHER</div><div class="quote">“Discipline Turns Signals<br>Into Freedom”</div><div class="tools"><div class="sessions"><div><b>SYD</b><strong>22:14</strong><em>Open</em></div><div><b>TKY</b><strong>00:14</strong><em>Open</em></div><div class="on"><b>LDN</b><strong>14:14</strong><em>Open</em></div><div><b>NY</b><strong>09:14</strong><em>Open</em></div></div><div class="news"><b>News Countdown</b><strong id="news">--:--</strong><small id="newsLabel">USD • next scheduled window</small></div><button id="install" class="install">📱 <b>Install LUMORA App</b></button><button id="bell" class="notify-btn">🔔 <b>Enable Notifications</b></button><div id="appReady" class="app-ready">✓ <b>App Ready</b><small>Installed</small></div><button id="logoutBtn" class="notify-btn">🔒 <b>Sign Out</b></button></div></header>
 <div class="layout"><aside class="side"><nav><a class="active nav" data-view="Dashboard"><span>⌂</span>Dashboard</a><a class="nav" data-view="Live Signals"><span>◉</span>Live Signals</a><a class="nav" data-view="Market"><span>▥</span>Market</a><a class="nav" data-view="Performance"><span>⌁</span>Performance</a><a class="nav" data-view="News & Calendar"><span>▣</span>News & Calendar</a><a class="nav" data-view="Settings"><span>⚙</span>Settings</a></nav><div class="promo"><div class="big">TRADE<br><b>GOLD</b><br>TRADE<br><strong>SMARTER</strong></div><div class="bars">▰<br>▰▰</div><b style="color:#12e0ff">◈ LUMORA</b><small>DISCIPLINE<br>BRINGS FREEDOM</small></div></aside>
 <div class="mobile-nav"><button>☰</button><b>LUMORA</b><button id="mBell">🔔</button></div><main>
 <section class="ticker"><div class="gold"><span style="font-size:25px;color:#ffd63b">◆</span><div><b>XAU/USD</b><small>GOLD</small></div><strong id="price">2641.39</strong><em id="chg">+2.36 (+0.09%)</em></div><div><small>Spread</small><b id="spread">--</b></div><div><small>ATR (M1)</small><b id="atr">2.15</b></div><div><small>Market Regime</small><b class="green">TRENDING</b></div><div class="session"><small>Session</small><b><i></i>London</b><em>Active</em></div><div class="bridge"><small>MT5 Bridge</small><b><i></i>CONNECTED</b></div></section>
@@ -175,6 +186,22 @@ footer{width:100%;height:auto;min-height:52px;padding:9px 10px;display:flex;flex
 </main></div><div id="pageView" class="page-view"><div class="page-card"><div class="title"><b id="pageTitle">LUMORA</b><button id="closePage">×</button></div><div id="pageContent"></div></div></div><footer><b style="font-size:17px;color:#edf5ff">LUMORA</b><span>© 2026 Lumora. Trade Smarter Together.</span><i style="margin:auto">REAL SIGNALS &nbsp;|&nbsp; REAL RESULTS &nbsp;|&nbsp; A BRIGHTER TRADING FUTURE</i><em>XAU/USD &nbsp;|&nbsp; 30 SECOND SIGNAL ENGINE &nbsp;|&nbsp; v2.0</em></footer><div id="toast" class="toast"></div>
 <script>
 const $=id=>document.getElementById(id);
+
+const AUTH_KEY='lumora_auth';
+function loadAuth(){try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'null');}catch{return null;}}
+function saveAuth(a){try{localStorage.setItem(AUTH_KEY,JSON.stringify(a));}catch{}}
+function clearAuth(){try{localStorage.removeItem(AUTH_KEY);}catch{}}
+let auth=loadAuth();
+let dashboardStarted=false;
+function showLogin(message){
+  $('loginScreen').classList.remove('hidden');
+  $('loginError').textContent=message||'';
+  $('loginBtn').disabled=false;
+  $('loginBtn').textContent='Sign In';
+}
+function hideLogin(){
+  $('loginScreen').classList.add('hidden');
+}
 
 const state={
   history:[],
@@ -388,15 +415,21 @@ async function loadState(){
   // Keep polling reliable on mobile networks without allowing slow requests
   // to pile up and freeze the visible dashboard.
   if(state.loading)return;
+  if(!auth)return;
   state.loading=true;
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),4500);
   try{
     const r=await fetch('/api/v1/state?ts='+Date.now(),{
       cache:'no-store',
-      headers:{'Cache-Control':'no-cache','Pragma':'no-cache'},
+      headers:{'Cache-Control':'no-cache','Pragma':'no-cache','X-Lumora-User':auth.username,'X-Lumora-Token':auth.token},
       signal:controller.signal
     });
+    if(r.status===401){
+      clearAuth();auth=null;
+      showLogin('Logged in on another device.');
+      return;
+    }
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const d=await r.json();
     if(Number.isFinite(Number(d.server_epoch))) state.serverOffsetMs=Number(d.server_epoch)*1000-Date.now();
@@ -666,13 +699,68 @@ document.querySelectorAll('.nav').forEach(a=>a.addEventListener('click',()=>{
 }));
 $('closePage').onclick=()=>$('pageView').style.display='none';
 
-// Server-authoritative countdown: refresh never resets it.
-setInterval(()=>{updateSignalStatus(); updateNewsCountdown(); chart();},250);
-setInterval(()=>{if(state.active && expiryEpoch(state.active)<=Math.floor(serverNowMs()/1000)){ updateSignalStatus(); }},250);
-setInterval(()=>{loadState();},1000);
+function startDashboard(){
+  if(dashboardStarted)return;
+  dashboardStarted=true;
+  // Server-authoritative countdown: refresh never resets it.
+  setInterval(()=>{updateSignalStatus(); updateNewsCountdown(); chart();},250);
+  setInterval(()=>{if(state.active && expiryEpoch(state.active)<=Math.floor(serverNowMs()/1000)){ updateSignalStatus(); }},250);
+  // Vercel production uses short-lived API requests + 1-second state polling.
+  // This replaces the long-lived local SSE connection, which is not required for the dashboard.
+  // The same poll doubles as a session check: a 401 here means another device signed in.
+  setInterval(()=>{loadState();},1000);
+  loadState().then(()=>{chart();});
+  performance();renderNotifications();updateSignalStatus();updateNewsCountdown();chart();
+}
 
-// Vercel production uses short-lived API requests + 1-second state polling.
-// This replaces the long-lived local SSE connection, which is not required for the dashboard.
-loadState().then(()=>{chart();});
-performance();renderNotifications();updateSignalStatus();updateNewsCountdown();chart();
+$('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const username=$('loginUser').value.trim();
+  const password=$('loginPass').value;
+  if(!username||!password)return;
+  $('loginBtn').disabled=true;
+  $('loginBtn').textContent='Signing in…';
+  $('loginError').textContent='';
+  try{
+    const r=await fetch('/api/v1/auth/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username,password})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||!d.ok){
+      showLogin(d.error==='invalid_credentials'?'Invalid username or password.':'Sign in failed. Try again.');
+      return;
+    }
+    auth={username:d.username,token:d.token};
+    saveAuth(auth);
+    $('loginPass').value='';
+    hideLogin();
+    startDashboard();
+  }catch(err){
+    showLogin('Network error. Try again.');
+  }
+});
+
+$('logoutBtn').addEventListener('click', async ()=>{
+  if(auth){
+    try{
+      await fetch('/api/v1/auth/logout',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({username:auth.username,token:auth.token})
+      });
+    }catch{}
+  }
+  clearAuth();
+  auth=null;
+  showLogin('Signed out.');
+});
+
+if(auth){
+  hideLogin();
+  startDashboard();
+}else{
+  showLogin();
+}
 </script></body></html>

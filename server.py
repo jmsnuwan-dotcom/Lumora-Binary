@@ -1,4 +1,4 @@
-import json, os, threading, time
+import json, os, threading, time, secrets, hmac, hashlib
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse
 
@@ -11,6 +11,42 @@ history=[]
 market={}
 active_signal=None
 news_target_epoch=0
+sessions={}  # username -> {'token':..., 'created_at':...}; one entry per user enforces one active device
+
+def load_dotenv():
+    """Minimal .env loader so LUMORA_USERS can be set without extra dependencies."""
+    path=os.path.join(ROOT,'.env')
+    if not os.path.exists(path):
+        return
+    for line in open(path,encoding='utf8'):
+        line=line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        k,v=line.split('=',1)
+        os.environ.setdefault(k.strip(),v.strip())
+
+load_dotenv()
+
+def load_users():
+    try:
+        arr=json.loads(os.environ.get('LUMORA_USERS','[]'))
+    except Exception:
+        arr=[]
+    return {u.get('username'):u.get('password_hash') for u in arr if u.get('username') and u.get('password_hash')}
+
+USERS=load_users()
+
+def verify_password(password, stored):
+    try:
+        algo,salt_hex,hash_hex=stored.split(':')
+        if algo!='scrypt':
+            return False
+        salt=bytes.fromhex(salt_hex)
+        expected=bytes.fromhex(hash_hex)
+        test=hashlib.scrypt(password.encode('utf8'),salt=salt,n=16384,r=8,p=1,dklen=len(expected))
+        return hmac.compare_digest(expected,test)
+    except Exception:
+        return False
 
 if os.path.exists(STATE):
     try:
@@ -227,13 +263,26 @@ class Handler(SimpleHTTPRequestHandler):
 
     def end_headers(self):
         self.send_header('Access-Control-Allow-Origin','*')
-        self.send_header('Access-Control-Allow-Headers','Content-Type,Authorization')
+        self.send_header('Access-Control-Allow-Headers','Content-Type,Authorization,X-Lumora-User,X-Lumora-Token')
         self.send_header('Access-Control-Allow-Methods','GET,POST,OPTIONS')
         super().end_headers()
 
     def do_OPTIONS(self):
         self.send_response(204)
         self.end_headers()
+
+    def check_auth(self):
+        user=self.headers.get('X-Lumora-User','')
+        token=self.headers.get('X-Lumora-Token','')
+        if not user or not token:
+            return False,'unauthorized'
+        with lock:
+            sess=sessions.get(user)
+        if not sess:
+            return False,'session_expired'
+        if not hmac.compare_digest(sess['token'],token):
+            return False,'session_revoked'
+        return True,None
 
     def do_GET(self):
         path=urlparse(self.path).path
@@ -265,6 +314,10 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
         if path=='/api/v1/state':
+            ok,reason=self.check_auth()
+            if not ok:
+                self.send_json({'ok':False,'error':reason},401)
+                return
             with lock:
                 now=int(time.time())
                 changed=bool(settle_all_expired(now))
@@ -292,6 +345,39 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         global active_signal, market
         path=urlparse(self.path).path
+
+        if path=='/api/v1/auth/login':
+            try:
+                n=int(self.headers.get('Content-Length','0'))
+                body=json.loads(self.rfile.read(n).decode('utf8'))
+                username=str(body.get('username','')).strip()
+                password=str(body.get('password',''))
+                stored=USERS.get(username)
+                if not stored or not verify_password(password,stored):
+                    self.send_json({'ok':False,'error':'invalid_credentials'},401)
+                    return
+                token=secrets.token_hex(32)
+                with lock:
+                    sessions[username]={'token':token,'created_at':int(time.time())}
+                self.send_json({'ok':True,'username':username,'token':token})
+            except Exception as e:
+                self.send_json({'ok':False,'error':str(e)},400)
+            return
+
+        if path=='/api/v1/auth/logout':
+            try:
+                n=int(self.headers.get('Content-Length','0'))
+                body=json.loads(self.rfile.read(n).decode('utf8'))
+                username=str(body.get('username','')).strip()
+                token=str(body.get('token',''))
+                with lock:
+                    sess=sessions.get(username)
+                    if sess and hmac.compare_digest(sess['token'],token):
+                        del sessions[username]
+                self.send_json({'ok':True})
+            except Exception as e:
+                self.send_json({'ok':False,'error':str(e)},400)
+            return
 
         if path not in ('/api/v1/signals','/api/v1/market'):
             self.send_json({'error':'not found'},404)

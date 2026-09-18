@@ -1,8 +1,47 @@
 import { Pool } from 'pg';
+import crypto from 'crypto';
 
 const VERSION = 'LUMORA_V16_MARKET_EVENT_FIXED';
 let pool;
 let schemaPromise;
+
+function loadUsers() {
+  const map = new Map();
+  try {
+    const arr = JSON.parse(process.env.LUMORA_USERS || '[]');
+    for (const u of arr) {
+      if (u && u.username && u.password_hash) map.set(u.username, u.password_hash);
+    }
+  } catch (_) {}
+  return map;
+}
+
+function verifyPassword(password, stored) {
+  const parts = String(stored || '').split(':');
+  if (parts.length !== 3 || parts[0] !== 'scrypt') return false;
+  try {
+    const salt = Buffer.from(parts[1], 'hex');
+    const expected = Buffer.from(parts[2], 'hex');
+    const test = crypto.scryptSync(password, salt, expected.length);
+    return expected.length === test.length && crypto.timingSafeEqual(expected, test);
+  } catch (_) {
+    return false;
+  }
+}
+
+async function checkAuth(db, req) {
+  const username = req.headers['x-lumora-user'];
+  const token = req.headers['x-lumora-token'];
+  if (!username || !token) return { ok: false, error: 'unauthorized' };
+  const r = await db.query('SELECT token FROM lumora_sessions WHERE username=$1', [username]);
+  if (!r.rowCount) return { ok: false, error: 'session_expired' };
+  const stored = Buffer.from(String(r.rows[0].token));
+  const given = Buffer.from(String(token));
+  if (stored.length !== given.length || !crypto.timingSafeEqual(stored, given)) {
+    return { ok: false, error: 'session_revoked' };
+  }
+  return { ok: true, username };
+}
 
 function getPool() {
   if (!process.env.DATABASE_URL) return null;
@@ -51,6 +90,11 @@ async function createSchemaSafely(db) {
         received_at BIGINT NOT NULL,
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
+      CREATE TABLE IF NOT EXISTS lumora_sessions (
+        username TEXT PRIMARY KEY,
+        token TEXT NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
     `);
 
     await client.query('COMMIT');
@@ -79,7 +123,7 @@ function send(res, status, body) {
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Lumora-User, X-Lumora-Token');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 }
 
@@ -255,7 +299,38 @@ async function handle(req, res) {
   try {
     await ensureSchema(db);
 
+    if (route === '/api/v1/auth/login' || route === '/v1/auth/login') {
+      if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
+      const input = bodyOf(req);
+      const username = String(input.username || '').trim();
+      const password = String(input.password || '');
+      const stored = loadUsers().get(username);
+      if (!stored || !verifyPassword(password, stored)) {
+        return send(res, 401, { ok: false, error: 'invalid_credentials' });
+      }
+      const token = crypto.randomBytes(32).toString('hex');
+      await db.query(`
+        INSERT INTO lumora_sessions(username, token, created_at)
+        VALUES($1,$2,NOW())
+        ON CONFLICT(username) DO UPDATE SET token=EXCLUDED.token, created_at=NOW()
+      `, [username, token]);
+      return send(res, 200, { ok: true, username, token });
+    }
+
+    if (route === '/api/v1/auth/logout' || route === '/v1/auth/logout') {
+      if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
+      const input = bodyOf(req);
+      const username = String(input.username || '').trim();
+      const token = String(input.token || '');
+      if (username && token) {
+        await db.query('DELETE FROM lumora_sessions WHERE username=$1 AND token=$2', [username, token]);
+      }
+      return send(res, 200, { ok: true });
+    }
+
     if (route === '/api/v1/state' || route === '/v1/state') {
+      const auth = await checkAuth(db, req);
+      if (!auth.ok) return send(res, 401, { ok: false, error: auth.error });
       return send(res, 200, await state(db));
     }
 
