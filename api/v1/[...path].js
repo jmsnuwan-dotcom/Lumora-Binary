@@ -299,7 +299,7 @@ async function handle(req, res) {
   try {
     await ensureSchema(db);
 
-    if (route === '/api/v1/auth/login' || route === '/v1/auth/login') {
+    if (route === '/api/v1/login' || route === '/v1/login') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
       const username = String(input.username || '').trim();
@@ -317,7 +317,7 @@ async function handle(req, res) {
       return send(res, 200, { ok: true, username, token });
     }
 
-    if (route === '/api/v1/auth/logout' || route === '/v1/auth/logout') {
+    if (route === '/api/v1/logout' || route === '/v1/logout') {
       if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
       const input = bodyOf(req);
       const username = String(input.username || '').trim();

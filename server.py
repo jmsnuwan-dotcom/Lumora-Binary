@@ -346,7 +346,7 @@ class Handler(SimpleHTTPRequestHandler):
         global active_signal, market
         path=urlparse(self.path).path
 
-        if path=='/api/v1/auth/login':
+        if path=='/api/v1/login':
             try:
                 n=int(self.headers.get('Content-Length','0'))
                 body=json.loads(self.rfile.read(n).decode('utf8'))
@@ -364,7 +364,7 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_json({'ok':False,'error':str(e)},400)
             return
 
-        if path=='/api/v1/auth/logout':
+        if path=='/api/v1/logout':
             try:
                 n=int(self.headers.get('Content-Length','0'))
                 body=json.loads(self.rfile.read(n).decode('utf8'))

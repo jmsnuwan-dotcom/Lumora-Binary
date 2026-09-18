@@ -722,7 +722,7 @@ $('loginForm').addEventListener('submit', async (e)=>{
   $('loginBtn').textContent='Signing in…';
   $('loginError').textContent='';
   try{
-    const r=await fetch('/api/v1/auth/login',{
+    const r=await fetch('/api/v1/login',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({username,password})
@@ -745,7 +745,7 @@ $('loginForm').addEventListener('submit', async (e)=>{
 $('logoutBtn').addEventListener('click', async ()=>{
   if(auth){
     try{
-      await fetch('/api/v1/auth/logout',{
+      await fetch('/api/v1/logout',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({username:auth.username,token:auth.token})
